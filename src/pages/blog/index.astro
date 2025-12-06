@@ -13,24 +13,46 @@ const formatDate = (date: Date) => {
         day: 'numeric'
     });
 };
+
+// Extract unique categories
+const categories = ['All', ...new Set(allPosts.flatMap(post => post.data.categories))];
 ---
 
 <Layout title="Blog | Savitha">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto px-4">
         
         <header class="mb-12 text-center">
-            <h1 class="text-4xl md:text-5xl font-comic-heading text-black mb-4 transform -rotate-1">
+            <h1 class="text-4xl md:text-5xl font-comic-heading text-black mb-6 transform -rotate-1">
                 <span class="bg-primary text-white px-4 py-2 inline-block shadow-[4px_4px_0_0_#000] border-black border-2">
                     My Writings
                 </span>
             </h1>
-            <p class="text-xl font-comic-body text-text-muted">Thoughts, tutorials, and rants about web development.</p>
+            
+            {/* Categories Filter */}
+            <div class="flex flex-wrap justify-center gap-3 mb-8" id="category-filters">
+                {categories.map(cat => (
+                    <button 
+                        data-category={cat}
+                        class={`
+                            px-3 py-1.5 font-comic-body font-bold text-sm border-2 border-black shadow-[2px_2px_0_0_#000] transition-all
+                            ${cat === 'All' ? 'bg-black text-white' : 'bg-white text-black hover:bg-black/5'}
+                        `}
+                    >
+                        {cat}
+                    </button>
+                ))}
+            </div>
         </header>
 
-        <div class="space-y-6">
-            {allPosts.map(post => (
-                <article class="comic-panel group hover:-translate-y-1 transition-transform duration-200">
-                    <a href={`/blog/${post.slug}`} class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-4">
+        {/* Blog Post List */}
+        <div class="space-y-6" id="posts-container">
+            {allPosts.map((post, index) => (
+                <article 
+                    class="comic-panel group hover:-translate-y-1 transition-transform duration-200 blog-post hidden" 
+                    data-categories={JSON.stringify(post.data.categories)}
+                    data-index={index}
+                >
+                    <a href={`/blog/${post.id}`} class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-4">
                         <h2 class="text-xl font-bold font-comic-heading text-black group-hover:text-primary transition-colors">
                             {post.data.title}
                         </h2>
@@ -45,5 +67,138 @@ const formatDate = (date: Date) => {
             ))}
         </div>
 
+        {/* Load More Button */}
+        <div class="mt-12 text-center hidden" id="load-more-container">
+            <button id="load-more-btn" class="comic-button bg-white !text-black hover:!bg-black hover:!text-white">
+                Show More
+            </button>
+        </div>
+
+        {/* No Results Message */}
+        <div id="no-results" class="hidden text-center py-12 font-comic-body text-xl text-text-muted italic">
+            No articles found for this category.
+        </div>
+
     </div>
 </Layout>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        initBlog();
+    });
+
+    // Fallback for initial load if view transitions aren't used or don't trigger
+    if (document.readyState === 'complete') {
+        initBlog();
+    } else {
+        document.addEventListener('DOMContentLoaded', initBlog);
+    }
+
+    function initBlog() {
+        const posts = document.querySelectorAll('.blog-post');
+        const filterBtns = document.querySelectorAll('#category-filters button');
+        // Get valid categories from buttons
+        const categories = Array.from(filterBtns).map(btn => (btn as HTMLElement).dataset.category as string);
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const loadMoreContainer = document.getElementById('load-more-container');
+        const noResults = document.getElementById('no-results');
+        
+        let currentCategory = 'All';
+        let itemsToShow = 6;
+        let visibleCount = 0;
+        let filteredPosts: Element[] = [];
+
+        // Filter Logic
+        function filterPosts(category: string) {
+            currentCategory = category;
+            
+            // Reset filtered list
+            filteredPosts = Array.from(posts).filter(post => {
+                if (category === 'All') return true;
+                const postCats = JSON.parse((post as HTMLElement).dataset.categories || '[]');
+                return postCats.includes(category);
+            });
+
+            // Update UI
+            // 1. Update buttons
+            filterBtns.forEach(btn => {
+                const btnCat = (btn as HTMLElement).dataset.category;
+                if (btnCat === category) {
+                    btn.classList.add('bg-black', 'text-white');
+                    btn.classList.remove('bg-white', 'text-black', 'hover:bg-black/5');
+                } else {
+                    btn.classList.remove('bg-black', 'text-white');
+                    btn.classList.add('bg-white', 'text-black', 'hover:bg-black/5');
+                }
+            });
+
+            // 2. Hide all first
+            posts.forEach(p => p.classList.add('hidden'));
+
+            if (filteredPosts.length === 0) {
+                noResults?.classList.remove('hidden');
+                loadMoreContainer?.classList.add('hidden');
+            } else {
+                noResults?.classList.add('hidden');
+                // Reset limit and show initial batch
+                visibleCount = 0;
+                showNextBatch();
+            }
+        }
+
+        // Pagination Logic
+        function showNextBatch() {
+            const nextBatch = filteredPosts.slice(visibleCount, visibleCount + itemsToShow);
+            
+            nextBatch.forEach(post => {
+                post.classList.remove('hidden');
+                // Add a small fade-in animation
+                post.animate([
+                    { opacity: 0, transform: 'translateY(10px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], { duration: 300, easing: 'ease-out' });
+            });
+
+            visibleCount += itemsToShow;
+
+            // Toggle Load More button
+            if (visibleCount >= filteredPosts.length) {
+                loadMoreContainer?.classList.add('hidden');
+            } else {
+                loadMoreContainer?.classList.remove('hidden');
+            }
+        }
+
+        // Event Listeners
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cat = (e.target as HTMLElement).dataset.category;
+                if (cat) filterPosts(cat);
+            });
+        });
+
+        loadMoreBtn?.addEventListener('click', showNextBatch);
+
+        // Infinite Scroll
+        if (loadMoreBtn) {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && visibleCount < filteredPosts.length) {
+                    showNextBatch();
+                }
+            }, { rootMargin: '100px' });
+            
+            observer.observe(loadMoreBtn);
+        }
+
+        // Init
+        // Check for query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+        
+        if (categoryParam && categories.includes(categoryParam)) {
+            filterPosts(categoryParam);
+        } else {
+            filterPosts('All');
+        }
+    }
+</script>

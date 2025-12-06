@@ -68,7 +68,7 @@ const readTime = Math.ceil(wordCount / 200);
 
                     <div class="flex flex-wrap gap-2">
                         {post.data.categories.map(cat => (
-                            <span class="text-sm font-bold font-comic-body px-3 py-1 bg-white text-black border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] uppercase">#{cat.toLowerCase().replace(' ', '-')}</span>
+                            <a href={`/blog?category=${cat}`} class="text-sm font-bold font-comic-body px-3 py-1 bg-white text-black border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] uppercase hover:bg-black hover:text-white transition-colors">#{cat.toLowerCase().replace(' ', '-')}</a>
                         ))}
                     </div>
                 </header>
@@ -79,8 +79,6 @@ const readTime = Math.ceil(wordCount / 200);
                     prose-li:text-black prose-li:font-comic-body prose-li:font-medium
                     prose-a:text-primary prose-a:font-bold prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-black prose-strong:font-black
-                    prose-code:text-primary prose-code:font-bold prose-code:bg-white prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:border-black prose-code:rounded-none prose-code:before:content-none prose-code:after:content-none
-                    prose-pre:bg-white prose-pre:border-[3px] prose-pre:border-black prose-pre:shadow-[4px_4px_0_0_#000] prose-pre:rounded-none prose-pre:text-sm
                     prose-img:border-[3px] prose-img:border-black prose-img:shadow-[4px_4px_0_0_#000] prose-img:rounded-none
                     prose-blockquote:border-l-[4px] prose-blockquote:border-black prose-blockquote:bg-white prose-blockquote:p-4 prose-blockquote:font-comic-body prose-blockquote:shadow-[4px_4px_0_0_#000] prose-blockquote:not-italic prose-blockquote:text-black
                     ">
@@ -110,36 +108,45 @@ const readTime = Math.ceil(wordCount / 200);
 
 <script>
     // Toggle Sidebar Functionality
-    const toggle = document.getElementById('toc-toggle');
-    const sidebar = document.getElementById('sidebar');
-    const mainGrid = document.getElementById('main-grid');
-    const tocContainer = document.getElementById('toc-container');
+    function initSidebar() {
+        const toggle = document.getElementById('toc-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainGrid = document.getElementById('main-grid');
+        const tocContainer = document.getElementById('toc-container');
 
-    if (toggle && sidebar && mainGrid) {
-        toggle.addEventListener('change', (e) => {
-            const isChecked = (e.target as HTMLInputElement).checked;
+        if (toggle && sidebar && mainGrid) {
+            // Remove old listener if exists (to prevent duplicates on re-renders if not cleaned up)
+            const newToggle = toggle.cloneNode(true);
+            toggle.parentNode.replaceChild(newToggle, toggle);
             
-            if (isChecked) {
-                // Show Sidebar
-                sidebar.classList.remove('hidden', 'lg:hidden');
-                sidebar.classList.add('lg:block');
-                mainGrid.classList.remove('lg:grid-cols-1');
-                mainGrid.classList.add('lg:grid-cols-[1fr_300px]');
-                setTimeout(() => {
-                   if(tocContainer) tocContainer.classList.remove('opacity-0'); 
-                }, 50);
-            } else {
-                // Hide Sidebar
-                if(tocContainer) tocContainer.classList.add('opacity-0');
-                setTimeout(() => {
-                    sidebar.classList.add('hidden', 'lg:hidden');
-                    sidebar.classList.remove('lg:block');
-                    mainGrid.classList.remove('lg:grid-cols-[1fr_300px]');
-                    mainGrid.classList.add('lg:grid-cols-1');
-                }, 300);
-            }
-        });
+            newToggle.addEventListener('change', (e) => {
+                const isChecked = (e.target as HTMLInputElement).checked;
+                
+                if (isChecked) {
+                    // Show Sidebar
+                    sidebar.classList.remove('hidden', 'lg:hidden');
+                    sidebar.classList.add('lg:block');
+                    mainGrid.classList.remove('lg:grid-cols-1');
+                    mainGrid.classList.add('lg:grid-cols-[1fr_300px]');
+                    setTimeout(() => {
+                       if(tocContainer) tocContainer.classList.remove('opacity-0'); 
+                    }, 50);
+                } else {
+                    // Hide Sidebar
+                    if(tocContainer) tocContainer.classList.add('opacity-0');
+                    setTimeout(() => {
+                        sidebar.classList.add('hidden', 'lg:hidden');
+                        sidebar.classList.remove('lg:block');
+                        mainGrid.classList.remove('lg:grid-cols-[1fr_300px]');
+                        mainGrid.classList.add('lg:grid-cols-1');
+                    }, 300);
+                }
+            });
+        }
     }
+
+    document.addEventListener('astro:page-load', initSidebar);
+    document.addEventListener('DOMContentLoaded', initSidebar);
 
     // Active TOC Link highlighting
     const observer = new IntersectionObserver((entries) => {
