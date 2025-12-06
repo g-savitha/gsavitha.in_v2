@@ -7,9 +7,10 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  fullWidth?: boolean;
 }
 
-const { title, description = "Savitha's Portfolio" } = Astro.props;
+const { title, description = "Savitha's Portfolio", fullWidth = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,7 +26,7 @@ const { title, description = "Savitha's Portfolio" } = Astro.props;
   </head>
   <body class="min-h-screen flex flex-col bg-background text-text overflow-x-hidden selection:bg-primary/30 selection:text-white">
     <Header />
-    <main class="flex-1 w-full max-w-5xl mx-auto px-4 py-8 sm:py-12">
+    <main class={`flex-1 w-full ${fullWidth ? '' : 'max-w-5xl mx-auto px-4 py-8 sm:py-12'}`}>
         <slot />
     </main>
     <Footer />
