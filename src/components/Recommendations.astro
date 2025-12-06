@@ -1,0 +1,76 @@
+---
+const recommendations = [
+    {
+        name: "John Doe",
+        role: "Tech Lead",
+        company: "Tech Corp",
+        text: "Savitha is a coding wizard! She transformed our legacy frontend into a modern, blazing fast app. Her attention to detail is unmatched.",
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+    },
+    {
+        name: "Jane Smith",
+        role: "Product Manager",
+        company: "Innovate Inc",
+        text: "Working with Savitha was a breeze. She not only writes great code but also understands product requirements deeply.",
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane"
+    },
+    {
+        name: "Mike Johnson",
+        role: "CTO",
+        company: "StartupX",
+        text: "I highly recommend Savitha for any frontend role. She brings energy, expertise, and a great sense of humor to the team.",
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike"
+    }
+];
+---
+
+<section class="py-20 bg-background overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4">
+        
+        <h2 class="text-5xl font-comic-heading text-center mb-16">
+            <span class="bg-primary text-white px-6 py-2 border-[3px] border-black shadow-[6px_6px_0_0_#000] inline-block rotate-1">
+                Alliance Approves!
+            </span>
+        </h2>
+
+        {/* Horizontal Scroll Area */}
+        <div class="flex overflow-x-auto gap-8 pb-12 px-4 snap-x snap-mandatory hide-scrollbar">
+            {recommendations.map(rec => (
+                <div class="snap-center shrink-0 w-[350px] relative mt-4">
+                    {/* Speech Bubble Box */}
+                    <div class="bg-white border-[3px] border-black p-6 shadow-[8px_8px_0_0_#000] relative group hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute -top-6 -left-6 text-6xl text-primary opacity-20 font-comic-heading">"</div>
+                        
+                        <p class="font-comic-body text-lg italic mb-6 relative z-10 line-clamp-4">
+                            {rec.text}
+                        </p>
+                        
+                        <div class="flex items-center gap-4 mt-auto border-t-2 border-dashed border-gray-300 pt-4">
+                            <img src={rec.image} alt={rec.name} class="w-12 h-12 rounded-full border-2 border-black bg-gray-200" />
+                            <div>
+                                <h4 class="font-comic-heading text-lg leading-none">{rec.name}</h4>
+                                <p class="text-xs font-bold text-text-muted">{rec.role} @ {rec.company}</p>
+                            </div>
+                        </div>
+
+                        {/* Read More Link (Simulated) */}
+                         <a href="https://linkedin.com" target="_blank" class="absolute top-0 right-0 bg-accent text-xs font-bold px-2 py-1 border-l-2 border-b-2 border-black hover:bg-accent-hover block">
+                            LINKEDIN
+                         </a>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+    </div>
+</section>
+
+<style>
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

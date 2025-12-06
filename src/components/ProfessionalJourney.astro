@@ -1,0 +1,62 @@
+---
+const timeline = [
+    {
+        year: '2023 - Present',
+        role: 'Senior Software Engineer',
+        company: 'Lloyds Banking Group',
+        desc: 'Leading frontend architecture for open banking solutions.',
+        color: 'bg-primary'
+    },
+    {
+        year: '2021 - 2023',
+        role: 'Frontend Developer',
+        company: 'Epam Systems',
+        desc: 'Developed robust e-commerce platforms and component libraries.',
+        color: 'bg-secondary'
+    },
+    {
+        year: '2019 - 2021',
+        role: 'Web Developer',
+        company: 'Freelance',
+        desc: 'Built custom websites and interactive experiences for various clients.',
+        color: 'bg-accent'
+    }
+];
+---
+<section class="py-20 bg-purple/10 border-t-[3px] border-b-[3px] border-black">
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <h2 class="text-5xl font-comic-heading text-center mb-16">
+            <span class="bg-white px-6 py-2 border-[3px] border-black shadow-[6px_6px_0_0_#000] inline-block -rotate-1">
+                Professional Journey
+            </span>
+        </h2>
+
+        <div class="relative space-y-12 before:absolute before:inset-0 before:ml-5 before:md:ml-[50%] before:-translate-x-px before:h-full before:w-[3px] before:bg-black before:border-r-[1px] before:border-dashed before:border-gray-400 before:-z-10">
+            
+            {timeline.map((item, index) => (
+                <div class={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                    
+                    {/* Timeline Dot (Comic style) */}
+                    <div class="absolute left-0 md:left-1/2 w-10 h-10 bg-white border-[3px] border-black rounded-full z-10 -translate-x-1.5 md:-translate-x-1/2 flex items-center justify-center shadow-[2px_2px_0_0_#000] group-hover:scale-110 transition-transform">
+                        <div class={`w-4 h-4 rounded-full ${item.color}`}></div>
+                    </div>
+
+                    {/* Content Box */}
+                    <div class="ml-16 md:ml-0 md:w-[45%] comic-panel hover:scale-105 transition-transform duration-200">
+                        <span class={`inline-block px-2 py-1 mb-2 text-xs font-bold border-2 border-black ${item.color} text-white shadow-[2px_2px_0_0_#000]`}>
+                            {item.year}
+                        </span>
+                        <h3 class="font-comic-heading text-xl md:text-2xl leading-tight">{item.role}</h3>
+                        <div class="font-bold text-sm text-text-muted mb-2">@ {item.company}</div>
+                        <p class="font-comic-body text-sm leading-relaxed">
+                            {item.desc}
+                        </p>
+                    </div>
+
+                </div>
+            ))}
+
+        </div>
+    </div>
+</section>

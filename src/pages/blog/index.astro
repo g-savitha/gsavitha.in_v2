@@ -2,52 +2,48 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
+const allPosts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+};
 ---
 
-<Layout title="Articles | Savitha">
-	<div class="max-w-3xl mx-auto">
-        <div class="mb-12 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Articles</h1>
-            <p class="text-text-muted text-lg">Thoughts on development, design, and everything in between.</p>
-        </div>
+<Layout title="Blog | Savitha">
+    <div class="max-w-3xl mx-auto">
+        
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-comic-heading text-black mb-4 transform -rotate-1">
+                <span class="bg-primary text-white px-4 py-2 inline-block shadow-[4px_4px_0_0_#000] border-black border-2">
+                    My Writings
+                </span>
+            </h1>
+            <p class="text-xl font-comic-body text-text-muted">Thoughts, tutorials, and rants about web development.</p>
+        </header>
 
-		<div class="grid gap-8">
-			{
-				posts.map((post) => (
-					<article class="group relative bg-surface border border-white/5 rounded-2xl p-6 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5">
-                        <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                        
-                        <div class="flex flex-col md:flex-row gap-4 md:items-center justify-between mb-4">
-                            <div class="flex gap-2">
-                                {post.data.categories.map(cat => (
-                                    <span class="text-xs font-medium px-2 py-1 rounded-md bg-white/5 text-secondary border border-white/5">{cat}</span>
-                                ))}
-                            </div>
-                            <time class="text-sm text-text-muted font-mono" datetime={post.data.pubDate.toISOString()}>
-                                {post.data.pubDate.toLocaleDateString('en-us', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                })}
+        <div class="space-y-6">
+            {allPosts.map(post => (
+                <article class="comic-panel group hover:-translate-y-1 transition-transform duration-200">
+                    <a href={`/blog/${post.slug}`} class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-4">
+                        <h2 class="text-xl font-bold font-comic-heading text-black group-hover:text-primary transition-colors">
+                            {post.data.title}
+                        </h2>
+                        <div class="flex items-center gap-4 shrink-0">
+                            <span class="h-px bg-black/20 flex-1 hidden sm:block w-32 border-dashed border-b border-black/20"></span>
+                            <time datetime={post.data.pubDate.toISOString()} class="font-comic-body font-bold text-text-muted text-sm bg-accent/20 px-2 py-1 rounded border border-black/20">
+                                {formatDate(post.data.pubDate)}
                             </time>
                         </div>
-                        
-						<a href={`/blog/${post.id}`} class="block z-10 relative">
-							<h2 class="text-2xl font-bold mb-2 group-hover:text-primary transition-colors">{post.data.title}</h2>
-                            <p class="text-text-muted leading-relaxed mb-4">{post.data.description}</p>
-                            <span class="text-accent font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                                Read article 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </span>
-						</a>
-					</article>
-				))
-			}
-		</div>
-	</div>
+                    </a>
+                </article>
+            ))}
+        </div>
+
+    </div>
 </Layout>

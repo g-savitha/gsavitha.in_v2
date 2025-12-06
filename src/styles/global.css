@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
 
 @import "tailwindcss";
@@ -41,7 +40,7 @@
 
   /* Fonts */
   --font-comic-heading: 'Bangers', system-ui, cursive;
-  --font-comic-body: 'Comic Neue', system-ui, sans-serif;
+  --font-comic-body: 'Source Sans 3', system-ui, sans-serif;
 
   /* Animations */
   --animate-pop: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);

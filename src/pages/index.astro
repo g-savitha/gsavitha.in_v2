@@ -1,95 +1,62 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-import HomeFeed from '../components/HomeFeed.astro';
+import Hero from '../components/Hero.astro';
+import AboutMe from '../components/AboutMe.astro';
+import ProfessionalJourney from '../components/ProfessionalJourney.astro';
+import Skills from '../components/Skills.astro';
 import HorizontalScroll from '../components/HorizontalScroll.astro';
-
-const allPosts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-// MOCK DATA: Duplicate posts to simulate infinite scroll
-const posts = [...allPosts, ...allPosts, ...allPosts];
-
-const categories = ['CSS', 'React', 'Animation', 'Career', 'JavaScript', 'SVG', 'Next.js', 'General'];
-const popularContent = [
-    'An Interactive Guide to Flexbox',
-    'A Modern CSS Reset',
-    'An Interactive Guide to CSS Transitions',
-    'How To Center a Div',
-    'The End of Front-End Development',
-    'An Interactive Guide to CSS Grid',
-    'Designing Beautiful Shadows in CSS',
-    'Making Sense of React Server Components',
-    'Why React Re-Renders',
-    'CSS Variables for React Devs'
-];
+import Recommendations from '../components/Recommendations.astro';
 
 const projects = [
-  { title: "Open Banking", subtitle: "Lloyds Banking Group", link: "/work" },
-  { title: "Readme Generator", subtitle: "Open Source", link: "https://github.com/rahuldkjain/github-profile-readme-generator" },
-  { title: "Vaccine Frontend", subtitle: "India Vaccine", link: "https://github.com/IndiaVaccineIN/india-vaccine-frontend" },
-  { title: "React Docs", subtitle: "Translation", link: "https://te-react-dev.vercel.app/" },
-  { title: "E-Commerce", subtitle: "Epam Systems", link: "/work" }
+  { 
+    title: "Open Banking", 
+    subtitle: "Lloyds Banking Group", 
+    link: "/work",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+  },
+  { 
+    title: "Readme Generator", 
+    subtitle: "Open Source", 
+    link: "https://github.com/rahuldkjain/github-profile-readme-generator",
+    image: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+  },
+  { 
+    title: "Vaccine Frontend", 
+    subtitle: "India Vaccine", 
+    link: "https://github.com/IndiaVaccineIN/india-vaccine-frontend",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+  },
+  { 
+    title: "React Docs", 
+    subtitle: "Translation", 
+    link: "https://te-react-dev.vercel.app/",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+  },
+  { 
+    title: "E-Commerce", 
+    subtitle: "Epam Systems", 
+    link: "/work",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+  }
 ];
-
-const simplePosts = posts.map(post => ({
-    id: post.id,
-    data: {
-        title: post.data.title,
-        description: post.data.description,
-        pubDate: post.data.pubDate.toISOString(),
-        categories: post.data.categories
-    }
-}));
 ---
 
-<Layout title="Savitha | Senior Software Engineer">
+<Layout title="Savitha | Senior Software Engineer" description="Savitha's comic-themed portfolio" fullWidth={true}>
     
-    {/* Featured Projects Section (Horizontal Scroll) */}
-    <HorizontalScroll title="Best Selling Projects" items={projects} />
-
-    <div class="max-w-6xl mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-16 relative">
-            
-            {/* Left Column: Articles */}
-            <main>
-                <header class="mb-12">
-                    <h1 class="text-sm font-bold tracking-widest text-accent uppercase mb-2 bg-black text-white inline-block px-2 py-1 transform -rotate-1">Articles and Tutorials</h1>
-                </header>
-
-                <HomeFeed posts={simplePosts} />
-            </main>
-
-            {/* Right Column: Sidebar */}
-            <aside class="space-y-12 h-full">
-                {/* Search / About Placeholder */}
-                <div class="comic-panel">
-                    <h3 class="text-sm font-bold tracking-widest text-black font-comic-heading uppercase mb-6 border-b-[length:var(--border-width-comic)] border-black pb-2">Browse by Category</h3>
-                    <div class="flex flex-wrap gap-3">
-                        {categories.map(cat => (
-                            <button class="px-3 py-1.5 text-sm font-bold font-comic-body bg-white hover:bg-primary hover:text-white border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-0.5 uppercase">
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                <div class="sticky top-24 comic-panel">
-                    <h3 class="text-sm font-bold tracking-widest text-black font-comic-heading uppercase mb-6 border-b-2 border-black pb-2">Popular Content</h3>
-                    <ul class="space-y-4">
-                        {popularContent.map(item => (
-                            <li>
-                                <a href="#" class="flex items-start gap-3 group text-black hover:text-primary transition-colors">
-                                    <span class="mt-1.5 text-primary group-hover:translate-x-1 transition-transform font-bold">→</span>
-                                    <span class="font-bold text-lg border-b-2 border-transparent group-hover:border-primary transition-colors font-comic-body">{item}</span>
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </aside>
-
+    <div class="overflow-x-hidden">
+        <Hero />
+        
+        <AboutMe />
+        
+        <ProfessionalJourney />
+        
+        <Skills />
+        
+        <div id="projects">
+            <HorizontalScroll title="Featured Projects" items={projects} />
         </div>
+        
+        <Recommendations />
     </div>
+
 </Layout>

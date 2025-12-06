@@ -1,10 +1,5 @@
 ---
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/blog', label: 'Articles' },
-  { href: '/work', label: 'Work' },
-  { href: '/sandbox', label: 'Playground' },
-];
+
 ---
 
 <header class="sticky top-0 z-50 bg-white border-b-[length:var(--border-width-comic)] border-black shadow-[0_var(--shadow-offset-comic)_0_0_rgba(0,0,0,0.1)]">
@@ -13,13 +8,12 @@ const navItems = [
       SAVITHA
     </a>
     
-    <nav class="hidden sm:flex gap-6">
-      {navItems.map(item => (
-        <a href={item.href} class="text-lg font-bold font-comic-heading text-black hover:text-primary hover:-translate-y-1 transition-all uppercase tracking-wide relative group">
-          {item.label}
-          <span class="absolute -bottom-1 left-0 w-0 h-[3px] bg-primary transition-all group-hover:w-full"></span>
+    <nav class="flex items-center gap-6">
+        <a href="/#projects" class="font-comic-heading text-xl text-black hover:text-primary transition-colors uppercase tracking-wide">Projects</a>
+        <a href="/blog" class="font-comic-heading text-xl text-black hover:text-primary transition-colors uppercase tracking-wide">Blog</a>
+        <a href="https://github.com" target="_blank" class="comic-button text-sm px-4 py-1 !shadow-[2px_2px_0_0_#000] hover:!shadow-[4px_4px_0_0_#000]">
+            GitHub
         </a>
-      ))}
     </nav>
     
     {/* Mobile Menu Placeholder - styled as a comic button if needed later */}
