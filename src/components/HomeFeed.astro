@@ -5,7 +5,7 @@ interface Props {
     data: {
       title: string;
       description: string;
-      pubDate: string; // We kept string serialization in index.astro for safety, though Astro component can handle Date objects better usually. Let's assume passed as is from index.
+      pubDate: string; 
       categories: string[];
     };
   }>;
@@ -19,40 +19,45 @@ const hiddenPosts = posts.slice(INITIAL_COUNT);
 ---
 
 <section>
-  <div class="space-y-16">
+  <div class="space-y-12">
     {/* Initial Posts */}
     {initialPosts.map((post, index) => (
-      <article class="group">
-        <a href={`/blog/${post.id}`} class="block mb-4">
-          <h2 class="text-3xl font-bold text-white group-hover:text-primary transition-colors duration-300 mb-4">
+      <article class="comic-panel transition-transform hover:-translate-y-1 duration-200">
+        <a href={`/blog/${post.id}`} class="block mb-3">
+          <h2 class="text-3xl font-bold font-comic-heading text-black hover:text-primary transition-colors duration-300">
             {post.data.title}
           </h2>
         </a>
-        <p class="text-gray-300 text-lg leading-relaxed mb-6">
+        <div class="mb-4">
+             {/* Date or category categories could go here */}
+             <span class="text-sm font-bold text-text-muted uppercase tracking-wider">{new Date(post.data.pubDate).toLocaleDateString()}</span>
+        </div>
+        <p class="text-black font-comic-body text-lg leading-relaxed mb-6">
           {post.data.description}
         </p>
-        <a href={`/blog/${post.id}`} class="text-primary font-bold hover:text-accent transition-colors flex items-center gap-2">
-          Read more
-          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        <a href={`/blog/${post.id}`} class="inline-block bg-secondary text-white font-bold font-comic-heading px-4 py-1 border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_#000] transition-all uppercase text-lg">
+          Read Issue
         </a>
       </article>
     ))}
 
     {/* Hidden Posts Container */}
-    <div id="hidden-posts" class="hidden space-y-16">
+    <div id="hidden-posts" class="hidden space-y-12">
       {hiddenPosts.map((post, index) => (
-        <article class="group">
-          <a href={`/blog/${post.id}`} class="block mb-4">
-            <h2 class="text-3xl font-bold text-white group-hover:text-primary transition-colors duration-300 mb-4">
+        <article class="comic-panel transition-transform hover:-translate-y-1 duration-200">
+          <a href={`/blog/${post.id}`} class="block mb-3">
+            <h2 class="text-3xl font-bold font-comic-heading text-black hover:text-primary transition-colors duration-300">
               {post.data.title}
             </h2>
           </a>
-          <p class="text-gray-300 text-lg leading-relaxed mb-6">
+          <div class="mb-4">
+             <span class="text-sm font-bold text-text-muted uppercase tracking-wider">{new Date(post.data.pubDate).toLocaleDateString()}</span>
+          </div>
+          <p class="text-black font-comic-body text-lg leading-relaxed mb-6">
             {post.data.description}
           </p>
-          <a href={`/blog/${post.id}`} class="text-primary font-bold hover:text-accent transition-colors flex items-center gap-2">
-            Read more
-            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          <a href={`/blog/${post.id}`} class="inline-block bg-secondary text-white font-bold font-comic-heading px-4 py-1 border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_#000] transition-all uppercase text-lg">
+            Read Issue
           </a>
         </article>
       ))}
@@ -63,12 +68,9 @@ const hiddenPosts = posts.slice(INITIAL_COUNT);
     <div class="mt-16 flex justify-center" id="show-more-container">
       <button
         id="show-more-btn"
-        class="px-8 py-3 bg-surface hover:bg-surface-hover text-text font-semibold rounded-lg border border-white/10 transition-colors flex items-center gap-2 group cursor-pointer"
+        class="comic-button"
       >
-        Show more
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
+        Show more issues
       </button>
     </div>
   )}

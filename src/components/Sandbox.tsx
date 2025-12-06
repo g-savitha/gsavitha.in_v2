@@ -3,7 +3,7 @@ import { atomDark } from "@codesandbox/sandpack-themes";
 
 export default function Sandbox() {
   return (
-    <div className="w-full my-8 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+    <div className="w-full my-8 border border-black rounded-none comic-box bg-white overflow-hidden">
       <Sandpack
         template="react"
         theme={atomDark}

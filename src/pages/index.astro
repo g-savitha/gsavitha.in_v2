@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import HomeFeed from '../components/HomeFeed.astro';
+import HorizontalScroll from '../components/HorizontalScroll.astro';
 
 const allPosts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -24,6 +25,14 @@ const popularContent = [
     'CSS Variables for React Devs'
 ];
 
+const projects = [
+  { title: "Open Banking", subtitle: "Lloyds Banking Group", link: "/work" },
+  { title: "Readme Generator", subtitle: "Open Source", link: "https://github.com/rahuldkjain/github-profile-readme-generator" },
+  { title: "Vaccine Frontend", subtitle: "India Vaccine", link: "https://github.com/IndiaVaccineIN/india-vaccine-frontend" },
+  { title: "React Docs", subtitle: "Translation", link: "https://te-react-dev.vercel.app/" },
+  { title: "E-Commerce", subtitle: "Epam Systems", link: "/work" }
+];
+
 const simplePosts = posts.map(post => ({
     id: post.id,
     data: {
@@ -36,40 +45,44 @@ const simplePosts = posts.map(post => ({
 ---
 
 <Layout title="Savitha | Senior Software Engineer">
+    
+    {/* Featured Projects Section (Horizontal Scroll) */}
+    <HorizontalScroll title="Best Selling Projects" items={projects} />
+
     <div class="max-w-6xl mx-auto px-4 py-12">
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-16 relative">
             
             {/* Left Column: Articles */}
             <main>
                 <header class="mb-12">
-                    <h1 class="text-sm font-bold tracking-widest text-accent uppercase mb-2">Articles and Tutorials</h1>
+                    <h1 class="text-sm font-bold tracking-widest text-accent uppercase mb-2 bg-black text-white inline-block px-2 py-1 transform -rotate-1">Articles and Tutorials</h1>
                 </header>
 
                 <HomeFeed posts={simplePosts} />
             </main>
 
             {/* Right Column: Sidebar */}
-            <aside class="space-y-16 h-full">
+            <aside class="space-y-12 h-full">
                 {/* Search / About Placeholder */}
-                <div class="p-6 bg-surface/50 rounded-2xl border border-white/5 backdrop-blur-sm">
-                    <h3 class="text-sm font-bold tracking-widest text-accent uppercase mb-6">Browse by Category</h3>
+                <div class="comic-panel">
+                    <h3 class="text-sm font-bold tracking-widest text-black font-comic-heading uppercase mb-6 border-b-[length:var(--border-width-comic)] border-black pb-2">Browse by Category</h3>
                     <div class="flex flex-wrap gap-3">
                         {categories.map(cat => (
-                            <button class="px-3 py-1.5 text-sm font-medium bg-surface hover:bg-white/10 border border-white/10 rounded-lg transition-colors text-text-muted hover:text-primary">
+                            <button class="px-3 py-1.5 text-sm font-bold font-comic-body bg-white hover:bg-primary hover:text-white border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] transition-all hover:-translate-y-0.5 uppercase">
                                 {cat}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                <div class="sticky top-24">
-                    <h3 class="text-sm font-bold tracking-widest text-accent uppercase mb-6">Popular Content</h3>
+                <div class="sticky top-24 comic-panel">
+                    <h3 class="text-sm font-bold tracking-widest text-black font-comic-heading uppercase mb-6 border-b-2 border-black pb-2">Popular Content</h3>
                     <ul class="space-y-4">
                         {popularContent.map(item => (
                             <li>
-                                <a href="#" class="flex items-start gap-3 group text-text-muted hover:text-text transition-colors">
-                                    <span class="mt-1.5 text-primary group-hover:translate-x-1 transition-transform">→</span>
-                                    <span class="font-medium text-lg border-b border-transparent group-hover:border-primary/30 transition-colors">{item}</span>
+                                <a href="#" class="flex items-start gap-3 group text-black hover:text-primary transition-colors">
+                                    <span class="mt-1.5 text-primary group-hover:translate-x-1 transition-transform font-bold">→</span>
+                                    <span class="font-bold text-lg border-b-2 border-transparent group-hover:border-primary transition-colors font-comic-body">{item}</span>
                                 </a>
                             </li>
                         ))}
