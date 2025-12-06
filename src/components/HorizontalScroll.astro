@@ -1,0 +1,70 @@
+---
+interface Props {
+  title: string;
+  items: Array<{
+    title: string;
+    subtitle?: string;
+    image?: string; 
+    link?: string;
+  }>;
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="py-16 bg-purple border-t-[length:var(--border-width-comic)] border-b-[length:var(--border-width-comic)] border-black overflow-hidden relative">
+  <div class="max-w-6xl mx-auto px-4">
+    
+    {/* Section Title */}
+    <div class="relative mb-12 text-center">
+       <h2 class="text-6xl font-comic-heading text-white drop-shadow-[4px_4px_0_#000] uppercase rotate-[-2deg] inline-block bg-primary px-6 py-2 border-[4px] border-black shadow-[6px_6px_0_0_#000] z-10 relative">
+         {title}
+       </h2>
+       {/* Decorative Elements */}
+       <div class="absolute top-1/2 left-0 right-0 h-[4px] bg-black -z-0"></div>
+    </div>
+
+    {/* Scroll Container */}
+    <div class="flex overflow-x-auto gap-8 pb-12 px-4 snap-x snap-mandatory hide-scrollbar">
+      {items.map((item, index) => (
+        <a href={item.link || '#'} class="snap-center shrink-0 w-[280px] group cursor-pointer hover:z-10">
+          <div class="bg-white border-[3px] border-black p-3 shadow-[6px_6px_0_0_#000] transition-transform duration-300 group-hover:-translate-y-4 group-hover:rotate-2 group-hover:shadow-[10px_10px_0_0_#000]">
+            
+            {/* Image/Visual Area */}
+            <div class="aspect-[2/3] bg-black mb-4 border-[2px] border-black overflow-hidden relative">
+               {item.image ? (
+                 <img src={item.image} alt={item.title} class="w-full h-full object-cover" />
+               ) : (
+                 <div class={`w-full h-full flex items-center justify-center bg-accent relative overflow-hidden group-hover:bg-accent-hover transition-colors`}>
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:8px_8px]"></div>
+                    <span class="font-comic-heading text-4xl text-black rotate-[-15deg] opacity-50">{index + 1}</span>
+                 </div>
+               )}
+               {/* "New" Badge */}
+               <div class="absolute top-2 right-2 w-8 h-8 rounded-full bg-primary border-[2px] border-black"></div>
+            </div>
+
+            {/* Content */}
+            <div class="text-center group-hover:scale-105 transition-transform">
+              <h3 class="font-comic-heading text-2xl text-black leading-none mb-1 group-hover:text-primary transition-colors uppercase">{item.title}</h3>
+              {item.subtitle && (
+                <p class="font-comic-body font-bold text-sm text-text-muted uppercase tracking-wider">{item.subtitle}</p>
+              )}
+            </div>
+            
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

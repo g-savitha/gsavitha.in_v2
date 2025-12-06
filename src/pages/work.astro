@@ -134,40 +134,73 @@ Beyond her technical skills, Savitha stands out for her leadership and sense of 
 
 <Layout title="Work Experience | Savitha">
     <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-4xl md:text-5xl font-bold mb-20 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">Experience</h1>
+        <h1 class="text-5xl md:text-6xl font-bold mb-20 text-center font-comic-heading text-black uppercase tracking-wide">
+            MY SAGA
+        </h1>
         
         {/* Timeline Container */}
-        <div class="relative">
-            {/* Vertical Line */}
-            <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-white/10 transform md:-translate-x-1/2"></div>
+        {/* Latest Comics (Work Experience) Container */}
+        <div class="space-y-24 relative">
+            
+            {jobs.map((job, index) => (
+                <div class="grid md:grid-cols-[400px_1fr] gap-12 items-center group">
+                    
+                    {/* Comic Cover (Visual Representation) */}
+                    <div class={`relative aspect-[3/4] border-[4px] border-black shadow-[8px_8px_0_0_#000] bg-white transition-transform hover:-translate-y-2 hover:shadow-[12px_12px_0_0_#000] overflow-hidden flex flex-col ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
+                        {/* "New Issue" Sticker */}
+                         <div class="absolute -right-6 top-6 bg-primary text-white font-comic-heading text-xl px-12 py-1 rotate-45 border-[3px] border-black z-20 shadow-md">
+                            ISSUE #{job.startYear}
+                        </div>
 
-            <div class="space-y-16">
-                {jobs.map((job, index) => (
-                    <div class="relative grid md:grid-cols-2 gap-8 md:gap-16 group">
+                        {/* Top Protocol Bar */}
+                        <div class="bg-black text-white px-4 py-2 flex justify-between items-center font-comic-body font-bold uppercase tracking-widest border-b-[3px] border-black z-10">
+                            <span>{job.company}</span>
+                            <span>$0.00</span>
+                        </div>
+
+                        {/* Cover Art Area (CSS Art) */}
+                        <div class="flex-1 relative bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent flex items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-500">
+                             {/* Dynamic Background Pattern */}
+                             <div class={`absolute inset-0 opacity-20 ${['bg-red-100', 'bg-blue-100', 'bg-yellow-100', 'bg-purple-100'][index % 4]}`} 
+                                  style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 10px 10px;">
+                             </div>
+                             
+                             {/* Big Title on Cover */}
+                             <h2 class="relative z-10 text-5xl font-comic-heading text-black leading-tight drop-shadow-[3px_3px_0_#fff] uppercase">
+                                 {job.role}
+                             </h2>
+                        </div>
+
+                        {/* Bottom Bar */}
+                        <div class="bg-white border-t-[3px] border-black p-4">
+                             <div class="flex justify-between items-end">
+                                 <div class="flex flex-col">
+                                     <span class="text-xs font-bold text-text-muted uppercase">Published By</span>
+                                     <span class="font-comic-heading text-xl">{job.company}</span>
+                                 </div>
+                                 <div class="barcode w-24 h-8 bg-black opacity-80" style="background: repeating-linear-gradient(90deg, #000 0px, #000 2px, #fff 2px, #fff 4px);"></div>
+                             </div>
+                        </div>
+                    </div>
+
+                    {/* Content Side (Description) */}
+                    <div class={`flex flex-col ${index % 2 === 0 ? 'md:order-2 md:pl-8' : 'md:order-1 md:pr-8 md:text-right'}`}>
+                        <div class="inline-block bg-accent px-4 py-1 border-[3px] border-black shadow-[4px_4px_0_0_#000] font-comic-heading text-lg -rotate-2 w-fit mb-6 self-start">
+                           {job.period}
+                        </div>
                         
-                        {/* Center Dot & Date */}
-                        <div class="absolute left-0 md:left-1/2 top-0 transform -translate-x-1/2 md:-translate-x-1/2 flex flex-col items-center">
-                            <div class="w-4 h-4 rounded-full bg-primary border-4 border-background z-10 box-content"></div>
-                            <div class="mt-2 text-sm font-mono text-primary font-bold bg-background/50 px-2 rounded backdrop-blur-sm whitespace-nowrap">
-                                {job.startYear}
-                            </div>
-                        </div>
+                        <h3 class="text-4xl font-bold font-comic-heading text-black mb-6 uppercase">
+                            {job.role} <span class="text-primary block text-2xl mt-2">@ {job.company}</span>
+                        </h3>
 
-                        {/* Left Side (Desktop: Role/Company, Mobile: Content) */}
-                        <div class={`pl-8 md:pl-0 md:text-right md:pr-8 ${index % 2 === 0 ? '' : 'md:order-1'}`}>
-                             <h3 class="text-2xl font-bold text-text group-hover:text-primary transition-colors">{job.role}</h3>
-                             <div class="text-lg text-secondary font-medium mb-2">{job.company}</div>
-                             <div class="text-sm text-text-muted md:hidden mb-4">{job.period}</div>
-                        </div>
-
-                        {/* Right Side (Description) */}
-                        <div class="pl-8 md:pl-8 border-l border-white/5 md:border-none">
-                            <ul class="space-y-3 text-text-muted mb-6 list-disc ml-4">
+                        <div class="comic-panel mb-8">
+                            <ul class={`space-y-3 text-black font-medium text-lg list-none ${index % 2 === 0 ? 'text-left' : 'md:text-right text-left'}`}>
                                 {job.description.map(desc => (
-                                    <li class="leading-relaxed">
+                                    <li class="leading-relaxed relative pl-6 md:pl-0">
+                                        <span class={`absolute left-0 top-2 w-2 h-2 bg-black rounded-full ${index % 2 === 0 ? '' : 'md:hidden'}`}></span>
                                         {desc.split(/(https?:\/\/[^\s]+)/g).map(part => 
                                             part.match(/^https?:\/\//) ? (
-                                                <a href={part} target="_blank" rel="noopener noreferrer" class="text-accent hover:underline break-all">{part}</a>
+                                                <a href={part} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline hover:text-primary-hover font-bold break-all">{part}</a>
                                             ) : (
                                                 part
                                             )
@@ -175,52 +208,41 @@ Beyond her technical skills, Savitha stands out for her leadership and sense of 
                                     </li>
                                 ))}
                             </ul>
-                            
-                            {/* Skills Section - Handles both Tech Stack (Categorized) and Simple Skills List */}
-                            {job.techStack ? (
-                                <div class="space-y-4 mt-6">
-                                    {Object.entries(job.techStack).map(([category, stack]) => (
-                                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
-                                            <span class="text-xs font-bold text-accent uppercase tracking-wider w-20 shrink-0 mt-1.5">{category}</span>
-                                            <div class="flex flex-wrap gap-2">
-                                                {stack.map(s => (
-                                                     <span class="bg-surface/50 text-xs font-mono px-2 py-1 rounded border border-white/5 text-text-muted hover:text-white hover:border-primary/30 transition-colors cursor-default">{s}</span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div class="flex flex-wrap gap-2 mt-6">
-                                    {job.skills && job.skills.map(s => (
-                                        <span class="bg-surface/50 text-xs font-mono px-2 py-1 rounded border border-white/5 text-text-muted hover:text-white hover:border-primary/30 transition-colors cursor-default">
-                                            {s}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
                         </div>
+
+                         {/* Skills Chips */}
+                         <div class={`flex flex-wrap gap-2 ${index % 2 === 0 ? 'justify-start' : 'md:justify-end justify-start'}`}>
+                            {job.techStack ? (
+                                Object.values(job.techStack).flat().map(s => (
+                                    <span class="px-3 py-1 font-bold font-comic-body border-2 border-black bg-white hover:bg-primary hover:text-white transition-colors cursor-default text-sm shadow-[2px_2px_0_0_#000]">{s}</span>
+                                ))
+                            ) : (
+                                job.skills && job.skills.map(s => (
+                                    <span class="px-3 py-1 font-bold font-comic-body border-2 border-black bg-white hover:bg-primary hover:text-white transition-colors cursor-default text-sm shadow-[2px_2px_0_0_#000]">{s}</span>
+                                ))
+                            )}
+                         </div>
                     </div>
-                ))}
-            </div>
+                </div>
+            ))}
         </div>
         
         <div class="mt-32">
-            <h2 class="text-3xl font-bold mb-12 text-center">Kind Words</h2>
+            <h2 class="text-5xl font-bold mb-12 text-center font-comic-heading uppercase">Kind Words</h2>
             <div class="md:columns-2 gap-8 space-y-8">
                 {recommendations.map(rec => (
-                    <div class="p-8 bg-surface/30 rounded-3xl border border-white/5 relative hover:border-primary/20 transition-colors break-inside-avoid">
-                        <div class="text-5xl text-primary/10 absolute top-6 left-6 serif font-black">"</div>
-                        <p class="text-base text-text-muted italic mb-6 relative z-10 leading-loose whitespace-pre-line">
+                    <div class="comic-panel break-inside-avoid">
+                        <div class="text-6xl text-primary/20 absolute top-2 left-4 font-comic-heading">"</div>
+                        <p class="text-lg text-black italic mb-6 relative z-10 leading-loose whitespace-pre-line font-comic-body">
                             {rec.text}
                         </p>
-                        <div class="flex items-center gap-4 mt-auto">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-background font-bold shrink-0">
+                        <div class="flex items-center gap-4 mt-auto border-t-2 border-black pt-4">
+                            <div class="w-12 h-12 rounded-full bg-accent border-[3px] border-black flex items-center justify-center text-black font-bold shrink-0 font-comic-heading text-xl">
                                 {rec.author[0]}
                             </div>
                             <div>
-                                <div class="font-bold text-text">{rec.author}</div>
-                                <div class="text-xs text-secondary/80">{rec.role}</div>
+                                <div class="font-bold text-black font-comic-heading text-lg">{rec.author}</div>
+                                <div class="text-sm text-black font-bold">{rec.role}</div>
                             </div>
                         </div>
                     </div>

@@ -20,19 +20,20 @@ const readTime = Math.ceil(wordCount / 200);
 
 <Layout title={post.data.title} description={post.data.description}>
     {/* Top Bar with Breadcrumbs & Toggle */}
-    <div class="sticky top-16 z-40 bg-background/80 backdrop-blur-md border-b border-white/5 mb-8">
+    {/* Top Bar with Breadcrumbs & Toggle */}
+    <div class="sticky top-0 z-40 bg-background border-b-[length:var(--border-width-comic)] border-black mb-8 pt-4 pb-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]">
         <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-            <nav class="flex items-center text-sm text-text-muted overflow-hidden whitespace-nowrap">
-                <a href="/blog" class="hover:text-primary transition-colors">Savitha's Blog</a>
-                <span class="mx-2">/</span>
-                <span class="truncate">{post.data.title}</span>
+            <nav class="flex items-center text-sm font-bold font-comic-body text-text-muted overflow-hidden whitespace-nowrap">
+                <a href="/blog" class="hover:text-primary transition-colors uppercase tracking-wide">Savitha's Blog</a>
+                <span class="mx-2 font-bold">/</span>
+                <span class="truncate uppercase">{post.data.title}</span>
             </nav>
 
             <label class="flex items-center gap-3 cursor-pointer group">
-                <span class="text-sm text-text-muted group-hover:text-text transition-colors">What's on this Page</span>
+                <span class="text-sm font-bold font-comic-body text-text-muted group-hover:text-text transition-colors uppercase">What's on this Page</span>
                 <div class="relative">
                     <input type="checkbox" id="toc-toggle" class="sr-only peer" checked>
-                    <div class="w-11 h-6 bg-surface rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <div class="w-11 h-6 bg-white border-2 border-black rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-black after:border-black after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-white"></div>
                 </div>
             </label>
         </div>
@@ -44,11 +45,11 @@ const readTime = Math.ceil(wordCount / 200);
             {/* Main Content */}
             <article class="min-w-0">
                 <header class="mb-10">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-text to-text-muted">
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-none font-comic-heading text-black drop-shadow-[3px_3px_0_#fff] uppercase">
                         {post.data.title}
                     </h1>
                     
-                    <div class="flex flex-wrap items-center gap-6 text-sm text-text-muted mb-6 font-mono">
+                    <div class="flex flex-wrap items-center gap-6 text-sm font-bold font-comic-body text-text-muted mb-6 uppercase tracking-wider">
                         <div class="flex items-center gap-2">
                             <span class="text-lg">📅</span>
                             <time datetime={post.data.pubDate.toISOString()}>
@@ -67,18 +68,21 @@ const readTime = Math.ceil(wordCount / 200);
 
                     <div class="flex flex-wrap gap-2">
                         {post.data.categories.map(cat => (
-                            <span class="text-sm font-medium px-3 py-1 rounded bg-surface/50 text-accent border border-white/5">#{cat.toLowerCase().replace(' ', '-')}</span>
+                            <span class="text-sm font-bold font-comic-body px-3 py-1 bg-white text-black border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] uppercase">#{cat.toLowerCase().replace(' ', '-')}</span>
                         ))}
                     </div>
                 </header>
                 
-                <div class="prose prose-lg prose-invert max-w-none
-                    prose-headings:font-bold prose-headings:text-text prose-headings:scroll-mt-24
-                    prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                    prose-strong:text-accent
-                    prose-code:text-accent prose-code:bg-surface prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-                    prose-pre:bg-surface prose-pre:border prose-pre:border-white/10 prose-pre:shadow-2xl prose-pre:rounded-xl
-                    prose-img:rounded-xl prose-img:border prose-img:border-white/10
+                <div class="prose prose-lg max-w-none
+                    prose-headings:font-comic-heading prose-headings:uppercase prose-headings:text-black prose-headings:scroll-mt-24
+                    prose-p:text-black prose-p:font-comic-body prose-p:font-medium prose-p:text-lg prose-p:leading-relaxed
+                    prose-li:text-black prose-li:font-comic-body prose-li:font-medium
+                    prose-a:text-primary prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-black prose-strong:font-black
+                    prose-code:text-primary prose-code:font-bold prose-code:bg-white prose-code:px-1.5 prose-code:py-0.5 prose-code:border prose-code:border-black prose-code:rounded-none prose-code:before:content-none prose-code:after:content-none
+                    prose-pre:bg-white prose-pre:border-[3px] prose-pre:border-black prose-pre:shadow-[4px_4px_0_0_#000] prose-pre:rounded-none prose-pre:text-sm
+                    prose-img:border-[3px] prose-img:border-black prose-img:shadow-[4px_4px_0_0_#000] prose-img:rounded-none
+                    prose-blockquote:border-l-[4px] prose-blockquote:border-black prose-blockquote:bg-white prose-blockquote:p-4 prose-blockquote:font-comic-body prose-blockquote:shadow-[4px_4px_0_0_#000] prose-blockquote:not-italic prose-blockquote:text-black
                     ">
                     <Content />
                 </div>

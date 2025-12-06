@@ -7,21 +7,22 @@ const navItems = [
 ];
 ---
 
-<header class="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-surface/50">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-    <a href="/" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent hover:opacity-80 transition-opacity">
-      Savitha
+<header class="sticky top-0 z-50 bg-white border-b-[length:var(--border-width-comic)] border-black shadow-[0_var(--shadow-offset-comic)_0_0_rgba(0,0,0,0.1)]">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+    <a href="/" class="text-3xl font-bold font-comic-heading text-black hover:text-primary transition-colors hover:scale-105 transform duration-200">
+      SAVITHA
     </a>
     
-    <nav class="hidden sm:flex gap-8">
+    <nav class="hidden sm:flex gap-6">
       {navItems.map(item => (
-        <a href={item.href} class="text-sm font-medium text-text-muted hover:text-primary transition-colors">
+        <a href={item.href} class="text-lg font-bold font-comic-heading text-black hover:text-primary hover:-translate-y-1 transition-all uppercase tracking-wide relative group">
           {item.label}
+          <span class="absolute -bottom-1 left-0 w-0 h-[3px] bg-primary transition-all group-hover:w-full"></span>
         </a>
       ))}
     </nav>
     
-    {/* Placeholder for Theme Toggle or Mobile Menu */}
-    <div class="sm:hidden text-text-muted">Menu</div>
+    {/* Mobile Menu Placeholder - styled as a comic button if needed later */}
+    <div class="sm:hidden font-comic-heading text-xl cursor-pointer hover:text-primary">MENU</div>
   </div>
 </header>
