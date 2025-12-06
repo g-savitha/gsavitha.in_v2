@@ -1,0 +1,175 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+
+// Calculate reading time (approx 200 words per minute)
+const wordCount = post.body.split(/\s+/g).length;
+const readTime = Math.ceil(wordCount / 200);
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+    {/* Top Bar with Breadcrumbs & Toggle */}
+    <div class="sticky top-16 z-40 bg-background/80 backdrop-blur-md border-b border-white/5 mb-8">
+        <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+            <nav class="flex items-center text-sm text-text-muted overflow-hidden whitespace-nowrap">
+                <a href="/blog" class="hover:text-primary transition-colors">Savitha's Blog</a>
+                <span class="mx-2">/</span>
+                <span class="truncate">{post.data.title}</span>
+            </nav>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <span class="text-sm text-text-muted group-hover:text-text transition-colors">What's on this Page</span>
+                <div class="relative">
+                    <input type="checkbox" id="toc-toggle" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-surface rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 relative">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 transition-all duration-300" id="main-grid">
+            
+            {/* Main Content */}
+            <article class="min-w-0">
+                <header class="mb-10">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-text to-text-muted">
+                        {post.data.title}
+                    </h1>
+                    
+                    <div class="flex flex-wrap items-center gap-6 text-sm text-text-muted mb-6 font-mono">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">📅</span>
+                            <time datetime={post.data.pubDate.toISOString()}>
+                                {post.data.pubDate.toLocaleDateString('en-us', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                })}
+                            </time>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">☕</span>
+                            <span>{readTime} min read</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        {post.data.categories.map(cat => (
+                            <span class="text-sm font-medium px-3 py-1 rounded bg-surface/50 text-accent border border-white/5">#{cat.toLowerCase().replace(' ', '-')}</span>
+                        ))}
+                    </div>
+                </header>
+                
+                <div class="prose prose-lg prose-invert max-w-none
+                    prose-headings:font-bold prose-headings:text-text prose-headings:scroll-mt-24
+                    prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-accent
+                    prose-code:text-accent prose-code:bg-surface prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                    prose-pre:bg-surface prose-pre:border prose-pre:border-white/10 prose-pre:shadow-2xl prose-pre:rounded-xl
+                    prose-img:rounded-xl prose-img:border prose-img:border-white/10
+                    ">
+                    <Content />
+                </div>
+            </article>
+
+            {/* Right Sidebar (TOC) */}
+            <aside class="hidden lg:block relative" id="sidebar">
+                <div class="sticky top-32 transition-opacity duration-300" id="toc-container">
+                    <h3 class="font-bold text-lg mb-4 text-text pl-4 border-l-2 border-primary">On this page</h3>
+                    <nav class="flex flex-col gap-1 max-h-[calc(100vh-10rem)] overflow-y-auto pr-4 custom-scrollbar">
+                        {headings.map(heading => (
+                            <a 
+                                href={`#${heading.slug}`} 
+                                class={`toc-link block py-1.5 px-4 text-sm text-text-muted hover:text-primary transition-colors border-l-2 border-transparent hover:border-white/10 ${heading.depth === 3 ? 'pl-8' : ''}`}
+                            >
+                                {heading.text}
+                            </a>
+                        ))}
+                    </nav>
+                </div>
+            </aside>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    // Toggle Sidebar Functionality
+    const toggle = document.getElementById('toc-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainGrid = document.getElementById('main-grid');
+    const tocContainer = document.getElementById('toc-container');
+
+    if (toggle && sidebar && mainGrid) {
+        toggle.addEventListener('change', (e) => {
+            const isChecked = (e.target as HTMLInputElement).checked;
+            
+            if (isChecked) {
+                // Show Sidebar
+                sidebar.classList.remove('hidden', 'lg:hidden');
+                sidebar.classList.add('lg:block');
+                mainGrid.classList.remove('lg:grid-cols-1');
+                mainGrid.classList.add('lg:grid-cols-[1fr_300px]');
+                setTimeout(() => {
+                   if(tocContainer) tocContainer.classList.remove('opacity-0'); 
+                }, 50);
+            } else {
+                // Hide Sidebar
+                if(tocContainer) tocContainer.classList.add('opacity-0');
+                setTimeout(() => {
+                    sidebar.classList.add('hidden', 'lg:hidden');
+                    sidebar.classList.remove('lg:block');
+                    mainGrid.classList.remove('lg:grid-cols-[1fr_300px]');
+                    mainGrid.classList.add('lg:grid-cols-1');
+                }, 300);
+            }
+        });
+    }
+
+    // Active TOC Link highlighting
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const id = entry.target.getAttribute('id');
+            const link = document.querySelector(`.toc-link[href="#${id}"]`);
+            if (entry.isIntersecting && link) {
+                document.querySelectorAll('.toc-link').forEach(l => {
+                    l.classList.remove('text-primary', 'border-primary', 'bg-surface/50');
+                    l.classList.add('text-text-muted', 'border-transparent');
+                });
+                link.classList.remove('text-text-muted', 'border-transparent');
+                link.classList.add('text-primary', 'border-primary', 'bg-surface/50');
+            }
+        });
+    }, { rootMargin: '-100px 0px -66%' });
+
+    document.querySelectorAll('h2, h3').forEach(heading => {
+        observer.observe(heading);
+    });
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+</style>

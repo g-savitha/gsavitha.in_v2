@@ -1,0 +1,42 @@
+---
+title: 'An Interactive Guide to Flexbox'
+description: 'Flexbox is a layout mode that finally makes it easy to arrange elements in a container. No more floats!'
+pubDate: 2024-01-10
+heroImage: '/blog-placeholder-4.jpg'
+categories: ['CSS', 'Layout', 'Guide']
+tags: ['css', 'flexbox', 'tutorial']
+---
+
+Flexbox (Flexible Box Module) is designed to provide a more efficient way to lay out, align and distribute space among items in a container, even when their size is unknown and/or dynamic.
+
+## The Two Axes
+
+The most important thing to likely understand is that Flexbox works on two axes: the **Main Axis** and the **Cross Axis**.
+
+- **Main Axis**: Defined by `flex-direction`. If `row`, main axis is horizontal.
+- **Cross Axis**: Perpendicular to the main axis.
+
+## Justify Content vs Align Items
+
+This is where beginners often get stuck:
+
+- `justify-content` controls alignment along the **Main Axis**.
+- `align-items` controls alignment along the **Cross Axis**.
+
+```css
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally (if row) */
+  align-items: center;     /* Center vertically (if row) */
+  height: 100vh;
+}
+```
+
+## Flex Grow, Shrink, Basis
+
+The shorthand `flex: 1` actually stands for:
+- `flex-grow: 1`
+- `flex-shrink: 1`
+- `flex-basis: 0%`
+
+Mastering these three properties gives you complete control over how elements resize to fill available space.

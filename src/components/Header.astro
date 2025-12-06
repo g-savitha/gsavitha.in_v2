@@ -1,0 +1,27 @@
+---
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/blog', label: 'Articles' },
+  { href: '/work', label: 'Work' },
+  { href: '/sandbox', label: 'Playground' },
+];
+---
+
+<header class="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-surface/50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="/" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent hover:opacity-80 transition-opacity">
+      Savitha
+    </a>
+    
+    <nav class="hidden sm:flex gap-8">
+      {navItems.map(item => (
+        <a href={item.href} class="text-sm font-medium text-text-muted hover:text-primary transition-colors">
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    
+    {/* Placeholder for Theme Toggle or Mobile Menu */}
+    <div class="sm:hidden text-text-muted">Menu</div>
+  </div>
+</header>

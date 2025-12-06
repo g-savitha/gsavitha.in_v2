@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import HomeFeed from '../components/HomeFeed.astro';
+
+const allPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// MOCK DATA: Duplicate posts to simulate infinite scroll
+const posts = [...allPosts, ...allPosts, ...allPosts];
+
+const categories = ['CSS', 'React', 'Animation', 'Career', 'JavaScript', 'SVG', 'Next.js', 'General'];
+const popularContent = [
+    'An Interactive Guide to Flexbox',
+    'A Modern CSS Reset',
+    'An Interactive Guide to CSS Transitions',
+    'How To Center a Div',
+    'The End of Front-End Development',
+    'An Interactive Guide to CSS Grid',
+    'Designing Beautiful Shadows in CSS',
+    'Making Sense of React Server Components',
+    'Why React Re-Renders',
+    'CSS Variables for React Devs'
+];
+
+const simplePosts = posts.map(post => ({
+    id: post.id,
+    data: {
+        title: post.data.title,
+        description: post.data.description,
+        pubDate: post.data.pubDate.toISOString(),
+        categories: post.data.categories
+    }
+}));
+---
+
+<Layout title="Savitha | Senior Software Engineer">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-16 relative">
+            
+            {/* Left Column: Articles */}
+            <main>
+                <header class="mb-12">
+                    <h1 class="text-sm font-bold tracking-widest text-accent uppercase mb-2">Articles and Tutorials</h1>
+                </header>
+
+                <HomeFeed posts={simplePosts} />
+            </main>
+
+            {/* Right Column: Sidebar */}
+            <aside class="space-y-16 h-full">
+                {/* Search / About Placeholder */}
+                <div class="p-6 bg-surface/50 rounded-2xl border border-white/5 backdrop-blur-sm">
+                    <h3 class="text-sm font-bold tracking-widest text-accent uppercase mb-6">Browse by Category</h3>
+                    <div class="flex flex-wrap gap-3">
+                        {categories.map(cat => (
+                            <button class="px-3 py-1.5 text-sm font-medium bg-surface hover:bg-white/10 border border-white/10 rounded-lg transition-colors text-text-muted hover:text-primary">
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div class="sticky top-24">
+                    <h3 class="text-sm font-bold tracking-widest text-accent uppercase mb-6">Popular Content</h3>
+                    <ul class="space-y-4">
+                        {popularContent.map(item => (
+                            <li>
+                                <a href="#" class="flex items-start gap-3 group text-text-muted hover:text-text transition-colors">
+                                    <span class="mt-1.5 text-primary group-hover:translate-x-1 transition-transform">→</span>
+                                    <span class="font-medium text-lg border-b border-transparent group-hover:border-primary/30 transition-colors">{item}</span>
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</Layout>
