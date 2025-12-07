@@ -40,7 +40,7 @@
 
   /* Fonts */
   --font-comic-heading: 'Bangers', system-ui, cursive;
-  --font-comic-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-comic-body: 'Comic Neue', 'Source Sans 3', system-ui, sans-serif;
 
   /* Animations */
   --animate-pop: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);

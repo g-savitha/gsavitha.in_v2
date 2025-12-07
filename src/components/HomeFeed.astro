@@ -5,7 +5,7 @@ interface Props {
     data: {
       title: string;
       description: string;
-      pubDate: string; 
+      pubDate: string;
       categories: string[];
     };
   }>;
@@ -21,59 +21,72 @@ const hiddenPosts = posts.slice(INITIAL_COUNT);
 <section>
   <div class="space-y-12">
     {/* Initial Posts */}
-    {initialPosts.map((post, index) => (
-      <article class="comic-panel transition-transform hover:-translate-y-1 duration-200">
-        <a href={`/blog/${post.id}`} class="block mb-3">
-          <h2 class="text-3xl font-bold font-comic-heading text-black hover:text-primary transition-colors duration-300">
-            {post.data.title}
-          </h2>
-        </a>
-        <div class="mb-4">
-             {/* Date or category categories could go here */}
-             <span class="text-sm font-bold text-text-muted uppercase tracking-wider">{new Date(post.data.pubDate).toLocaleDateString()}</span>
-        </div>
-        <p class="text-black font-comic-body text-lg leading-relaxed mb-6">
-          {post.data.description}
-        </p>
-        <a href={`/blog/${post.id}`} class="inline-block bg-secondary text-white font-bold font-comic-heading px-4 py-1 border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_#000] transition-all uppercase text-lg">
-          Read Issue
-        </a>
-      </article>
-    ))}
-
-    {/* Hidden Posts Container */}
-    <div id="hidden-posts" class="hidden space-y-12">
-      {hiddenPosts.map((post, index) => (
+    {
+      initialPosts.map((post, index) => (
         <article class="comic-panel transition-transform hover:-translate-y-1 duration-200">
-          <a href={`/blog/${post.id}`} class="block mb-3">
+          <a href={`/writings/${post.id}`} class="block mb-3">
             <h2 class="text-3xl font-bold font-comic-heading text-black hover:text-primary transition-colors duration-300">
               {post.data.title}
             </h2>
           </a>
           <div class="mb-4">
-             <span class="text-sm font-bold text-text-muted uppercase tracking-wider">{new Date(post.data.pubDate).toLocaleDateString()}</span>
+            {/* Date or category categories could go here */}
+            <span class="text-sm font-bold text-text-muted uppercase tracking-wider">
+              {new Date(post.data.pubDate).toLocaleDateString()}
+            </span>
           </div>
           <p class="text-black font-comic-body text-lg leading-relaxed mb-6">
             {post.data.description}
           </p>
-          <a href={`/blog/${post.id}`} class="inline-block bg-secondary text-white font-bold font-comic-heading px-4 py-1 border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_#000] transition-all uppercase text-lg">
+          <a
+            href={`/writings/${post.id}`}
+            class="inline-block bg-secondary text-white font-bold font-comic-heading px-4 py-1 border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_#000] transition-all uppercase text-lg"
+          >
             Read Issue
           </a>
         </article>
-      ))}
+      ))
+    }
+
+    {/* Hidden Posts Container */}
+    <div id="hidden-posts" class="hidden space-y-12">
+      {
+        hiddenPosts.map((post, index) => (
+          <article class="comic-panel transition-transform hover:-translate-y-1 duration-200">
+            <a href={`/writings/${post.id}`} class="block mb-3">
+              <h2 class="text-3xl font-bold font-comic-heading text-black hover:text-primary transition-colors duration-300">
+                {post.data.title}
+              </h2>
+            </a>
+            <div class="mb-4">
+              <span class="text-sm font-bold text-text-muted uppercase tracking-wider">
+                {new Date(post.data.pubDate).toLocaleDateString()}
+              </span>
+            </div>
+            <p class="text-black font-comic-body text-lg leading-relaxed mb-6">
+              {post.data.description}
+            </p>
+            <a
+              href={`/writings/${post.id}`}
+              class="inline-block bg-secondary text-white font-bold font-comic-heading px-4 py-1 border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_#000] transition-all uppercase text-lg"
+            >
+              Read Issue
+            </a>
+          </article>
+        ))
+      }
     </div>
   </div>
 
-  {hiddenPosts.length > 0 && (
-    <div class="mt-16 flex justify-center" id="show-more-container">
-      <button
-        id="show-more-btn"
-        class="comic-button"
-      >
-        Show more issues
-      </button>
-    </div>
-  )}
+  {
+    hiddenPosts.length > 0 && (
+      <div class="mt-16 flex justify-center" id="show-more-container">
+        <button id="show-more-btn" class="comic-button">
+          Show more issues
+        </button>
+      </div>
+    )
+  }
 </section>
 
 <script>
@@ -85,7 +98,7 @@ const hiddenPosts = posts.slice(INITIAL_COUNT);
     showMoreBtn.addEventListener('click', () => {
       // Reveal posts
       hiddenPosts.classList.remove('hidden');
-      
+
       // Hide button
       if (showMoreContainer) {
         showMoreContainer.style.display = 'none';
