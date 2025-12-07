@@ -1,0 +1,6 @@
+<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="48" fill="#C8102E" stroke="black" stroke-width="4"/>
+   <!-- Web lines -->
+  <path d="M50 50 L 10 10 M 50 50 L 90 10 M 50 50 L 10 90 M 50 50 L 90 90 M 50 50 L 50 2 M 50 50 L 50 98 M 50 50 L 2 50 M 50 50 L 98 50" stroke="black" stroke-width="1" opacity="0.3"/>
+  <path d="M25 40 Q 50 55 75 40 Q 90 20 80 60 Q 50 80 20 60 Q 10 20 25 40" fill="white" stroke="black" stroke-width="4"/>
+</svg>

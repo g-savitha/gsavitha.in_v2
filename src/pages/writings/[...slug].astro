@@ -1,0 +1,255 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    return posts.map((post) => ({
+        params: { slug: post.id },
+        props: post,
+    }));
+}
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+
+// Calculate reading time (approx 200 words per minute)
+const wordCount = post.body.split(/\s+/g).length;
+const readTime = Math.ceil(wordCount / 200);
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+    {/* Top Bar with Breadcrumbs & Toggle */}
+    {/* Top Bar with Breadcrumbs & Toggle */}
+    <div
+        class="sticky top-0 z-40 bg-background border-b-[length:var(--border-width-comic)] border-black mb-8 pt-4 pb-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]"
+    >
+        <div
+            class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between"
+        >
+            <nav
+                class="flex items-center text-sm font-bold font-comic-body text-text-muted overflow-hidden whitespace-nowrap"
+            >
+                <a
+                    href="/writings"
+                    class="hover:text-primary transition-colors uppercase tracking-wide"
+                    >Savitha's Writings</a
+                >
+                <span class="mx-2 font-bold">/</span>
+                <span class="truncate uppercase">{post.data.title}</span>
+            </nav>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <span
+                    class="text-sm font-bold font-comic-body text-text-muted group-hover:text-text transition-colors uppercase"
+                    >What's on this Page</span
+                >
+                <div class="relative">
+                    <input
+                        type="checkbox"
+                        id="toc-toggle"
+                        class="sr-only peer"
+                        checked
+                    />
+                    <div
+                        class="w-11 h-6 bg-white border-2 border-black rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-black after:border-black after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary peer-checked:after:bg-white"
+                    >
+                    </div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 relative">
+        <div
+            class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 transition-all duration-300"
+            id="main-grid"
+        >
+            {/* Main Content */}
+            <article class="min-w-0">
+                <header class="mb-10">
+                    <h1
+                        class="text-5xl md:text-7xl font-bold mb-6 leading-none font-comic-heading text-black drop-shadow-[3px_3px_0_#fff] uppercase"
+                    >
+                        {post.data.title}
+                    </h1>
+
+                    <div
+                        class="flex flex-wrap items-center gap-6 text-sm font-bold font-comic-body text-text-muted mb-6 uppercase tracking-wider"
+                    >
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">📅</span>
+                            <time datetime={post.data.pubDate.toISOString()}>
+                                {
+                                    post.data.pubDate.toLocaleDateString(
+                                        'en-us',
+                                        {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        },
+                                    )
+                                }
+                            </time>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">☕</span>
+                            <span>{readTime} min read</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        {
+                            post.data.categories.map((cat) => (
+                                <a
+                                    href={`/writings?category=${cat}`}
+                                    class="text-sm font-bold font-comic-body px-3 py-1 bg-white text-black border-[length:var(--border-width-comic)] border-black shadow-[2px_2px_0_0_#000] uppercase hover:bg-black hover:text-white transition-colors"
+                                >
+                                    #{cat.toLowerCase().replace(' ', '-')}
+                                </a>
+                            ))
+                        }
+                    </div>
+                </header>
+
+                <div
+                    class="prose prose-lg max-w-none
+                    prose-headings:font-comic-heading prose-headings:uppercase prose-headings:text-black prose-headings:scroll-mt-24
+                    prose-p:text-black prose-p:font-comic-body prose-p:font-medium prose-p:text-lg prose-p:leading-relaxed
+                    prose-li:text-black prose-li:font-comic-body prose-li:font-medium
+                    prose-a:text-primary prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-black prose-strong:font-black
+                    prose-img:border-[3px] prose-img:border-black prose-img:shadow-[4px_4px_0_0_#000] prose-img:rounded-none
+                    prose-blockquote:border-l-[4px] prose-blockquote:border-black prose-blockquote:bg-white prose-blockquote:p-4 prose-blockquote:font-comic-body prose-blockquote:shadow-[4px_4px_0_0_#000] prose-blockquote:not-italic prose-blockquote:text-black"
+                >
+                    <Content />
+                </div>
+            </article>
+
+            {/* Right Sidebar (TOC) */}
+            <aside class="hidden lg:block relative" id="sidebar">
+                <div
+                    class="sticky top-32 transition-opacity duration-300"
+                    id="toc-container"
+                >
+                    <h3
+                        class="font-bold text-lg mb-4 text-text pl-4 border-l-2 border-primary"
+                    >
+                        On this page
+                    </h3>
+                    <nav
+                        class="flex flex-col gap-1 max-h-[calc(100vh-10rem)] overflow-y-auto pr-4 custom-scrollbar"
+                    >
+                        {
+                            headings.map((heading) => (
+                                <a
+                                    href={`#${heading.slug}`}
+                                    class={`toc-link block py-1.5 px-4 text-sm text-text-muted hover:text-primary transition-colors border-l-2 border-transparent hover:border-white/10 ${heading.depth === 3 ? 'pl-8' : ''}`}
+                                >
+                                    {heading.text}
+                                </a>
+                            ))
+                        }
+                    </nav>
+                </div>
+            </aside>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    // Toggle Sidebar Functionality
+    function initSidebar() {
+        const toggle = document.getElementById('toc-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainGrid = document.getElementById('main-grid');
+        const tocContainer = document.getElementById('toc-container');
+
+        if (toggle && sidebar && mainGrid && toggle.parentNode) {
+            // Remove old listener if exists (to prevent duplicates on re-renders if not cleaned up)
+            const newToggle = toggle.cloneNode(true);
+            toggle.parentNode.replaceChild(newToggle, toggle);
+
+            newToggle.addEventListener('change', (e) => {
+                const isChecked = (e.target as HTMLInputElement).checked;
+
+                if (isChecked) {
+                    // Show Sidebar
+                    sidebar.classList.remove('hidden', 'lg:hidden');
+                    sidebar.classList.add('lg:block');
+                    mainGrid.classList.remove('lg:grid-cols-1');
+                    mainGrid.classList.add('lg:grid-cols-[1fr_300px]');
+                    setTimeout(() => {
+                        if (tocContainer)
+                            tocContainer.classList.remove('opacity-0');
+                    }, 50);
+                } else {
+                    // Hide Sidebar
+                    if (tocContainer) tocContainer.classList.add('opacity-0');
+                    setTimeout(() => {
+                        sidebar.classList.add('hidden', 'lg:hidden');
+                        sidebar.classList.remove('lg:block');
+                        mainGrid.classList.remove('lg:grid-cols-[1fr_300px]');
+                        mainGrid.classList.add('lg:grid-cols-1');
+                    }, 300);
+                }
+            });
+        }
+    }
+
+    document.addEventListener('astro:page-load', initSidebar);
+    document.addEventListener('DOMContentLoaded', initSidebar);
+
+    // Active TOC Link highlighting
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                const id = entry.target.getAttribute('id');
+                const link = document.querySelector(`.toc-link[href="#${id}"]`);
+                if (entry.isIntersecting && link) {
+                    document.querySelectorAll('.toc-link').forEach((l) => {
+                        l.classList.remove(
+                            'text-primary',
+                            'border-primary',
+                            'bg-surface/50',
+                        );
+                        l.classList.add(
+                            'text-text-muted',
+                            'border-transparent',
+                        );
+                    });
+                    link.classList.remove(
+                        'text-text-muted',
+                        'border-transparent',
+                    );
+                    link.classList.add(
+                        'text-primary',
+                        'border-primary',
+                        'bg-surface/50',
+                    );
+                }
+            });
+        },
+        { rootMargin: '-100px 0px -66%' },
+    );
+
+    document.querySelectorAll('h2, h3').forEach((heading) => {
+        observer.observe(heading);
+    });
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+</style>
