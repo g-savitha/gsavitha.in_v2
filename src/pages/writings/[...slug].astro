@@ -14,7 +14,7 @@ const post = Astro.props;
 const { Content, headings } = await render(post);
 
 // Calculate reading time (approx 200 words per minute)
-const wordCount = post.body.split(/\s+/g).length;
+const wordCount = (post.body || '').split(/\s+/g).length;
 const readTime = Math.ceil(wordCount / 200);
 ---
 
@@ -201,41 +201,55 @@ const readTime = Math.ceil(wordCount / 200);
     document.addEventListener('DOMContentLoaded', initSidebar);
 
     // Active TOC Link highlighting
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                const id = entry.target.getAttribute('id');
-                const link = document.querySelector(`.toc-link[href="#${id}"]`);
-                if (entry.isIntersecting && link) {
-                    document.querySelectorAll('.toc-link').forEach((l) => {
-                        l.classList.remove(
+    let observer: IntersectionObserver | null = null;
+
+    function initTOC() {
+        // Cleanup existing observer
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+
+        observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const id = entry.target.getAttribute('id');
+                    const link = document.querySelector(
+                        `.toc-link[href="#${id}"]`,
+                    );
+                    if (entry.isIntersecting && link) {
+                        document.querySelectorAll('.toc-link').forEach((l) => {
+                            l.classList.remove(
+                                'text-primary',
+                                'border-primary',
+                                'bg-surface/50',
+                            );
+                            l.classList.add(
+                                'text-text-muted',
+                                'border-transparent',
+                            );
+                        });
+                        link.classList.remove(
+                            'text-text-muted',
+                            'border-transparent',
+                        );
+                        link.classList.add(
                             'text-primary',
                             'border-primary',
                             'bg-surface/50',
                         );
-                        l.classList.add(
-                            'text-text-muted',
-                            'border-transparent',
-                        );
-                    });
-                    link.classList.remove(
-                        'text-text-muted',
-                        'border-transparent',
-                    );
-                    link.classList.add(
-                        'text-primary',
-                        'border-primary',
-                        'bg-surface/50',
-                    );
-                }
-            });
-        },
-        { rootMargin: '-100px 0px -66%' },
-    );
+                    }
+                });
+            },
+            { rootMargin: '-100px 0px -66%' },
+        );
 
-    document.querySelectorAll('h2, h3').forEach((heading) => {
-        observer.observe(heading);
-    });
+        document.querySelectorAll('h2, h3').forEach((heading) => {
+            observer.observe(heading);
+        });
+    }
+
+    document.addEventListener('astro:page-load', initTOC);
 </script>
 
 <style>
