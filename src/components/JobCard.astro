@@ -1,0 +1,143 @@
+---
+import type { Job } from '../types';
+
+interface Props {
+  job: Job;
+  index: number;
+}
+
+const { job, index } = Astro.props;
+
+const bgColors = [
+  'bg-red-100',
+  'bg-blue-100',
+  'bg-yellow-100',
+  'bg-purple-100',
+];
+---
+
+<div class="grid md:grid-cols-[400px_1fr] gap-12 items-center group">
+  {/* Comic Cover (Visual Representation) */}
+  <div
+    class={`relative aspect-[3/4] border-[4px] border-black shadow-[8px_8px_0_0_#000] bg-white transition-transform hover:-translate-y-2 hover:shadow-[12px_12px_0_0_#000] overflow-hidden flex flex-col ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}
+  >
+    {/* "New Issue" Sticker */}
+    <div
+      class="absolute -right-6 top-6 bg-primary text-white font-comic-heading text-xl px-12 py-1 rotate-45 border-[3px] border-black z-20 shadow-md"
+    >
+      ISSUE #{job.startYear}
+    </div>
+
+    {/* Top Protocol Bar */}
+    <div
+      class="bg-black text-white px-4 py-2 flex justify-between items-center font-comic-body font-bold uppercase tracking-widest border-b-[3px] border-black z-10"
+    >
+      <span>{job.company}</span>
+      <span>$0.00</span>
+    </div>
+
+    {/* Cover Art Area (CSS Art) */}
+    <div
+      class="flex-1 relative bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent flex items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-500"
+    >
+      {/* Dynamic Background Pattern */}
+      <div
+        class={`absolute inset-0 opacity-20 ${bgColors[index % 4]}`}
+        style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 10px 10px;"
+      >
+      </div>
+
+      {/* Big Title on Cover */}
+      <h2
+        class="relative z-10 text-5xl font-comic-heading text-black leading-tight drop-shadow-[3px_3px_0_#fff] uppercase"
+      >
+        {job.role}
+      </h2>
+    </div>
+
+    {/* Bottom Bar */}
+    <div class="bg-white border-t-[3px] border-black p-4">
+      <div class="flex justify-between items-end">
+        <div class="flex flex-col">
+          <span class="text-xs font-bold text-text-muted uppercase"
+            >Published By</span
+          >
+          <span class="font-comic-heading text-xl">{job.company}</span>
+        </div>
+        <div
+          class="barcode w-24 h-8 bg-black opacity-80"
+          style="background: repeating-linear-gradient(90deg, #000 0px, #000 2px, #fff 2px, #fff 4px);"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Content Side (Description) */}
+  <div
+    class={`flex flex-col ${index % 2 === 0 ? 'md:order-2 md:pl-8' : 'md:order-1 md:pr-8 md:text-right'}`}
+  >
+    <div
+      class="inline-block bg-accent px-4 py-1 border-[3px] border-black shadow-[4px_4px_0_0_#000] font-comic-heading text-lg -rotate-2 w-fit mb-6 self-start"
+    >
+      {job.period}
+    </div>
+
+    <h3 class="text-4xl font-bold font-comic-heading text-black mb-6 uppercase">
+      {job.role}
+      <span class="text-primary block text-2xl mt-2">@ {job.company}</span>
+    </h3>
+
+    <div class="comic-panel mb-8">
+      <ul
+        class={`space-y-3 text-black font-medium text-lg list-none ${index % 2 === 0 ? 'text-left' : 'md:text-right text-left'}`}
+      >
+        {
+          job.description.map((desc) => (
+            <li class="leading-relaxed relative pl-6 md:pl-0">
+              <span
+                class={`absolute left-0 top-2 w-2 h-2 bg-black rounded-full ${index % 2 === 0 ? '' : 'md:hidden'}`}
+              />
+              {desc.split(/(https?:\/\/[^\s]+)/g).map((part) =>
+                part.match(/^https?:\/\//) ? (
+                  <a
+                    href={part}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-primary hover:underline hover:text-primary-hover font-bold break-all"
+                  >
+                    {part}
+                  </a>
+                ) : (
+                  part
+                ),
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {/* Skills Chips */}
+    <div
+      class={`flex flex-wrap gap-2 ${index % 2 === 0 ? 'justify-start' : 'md:justify-end justify-start'}`}
+    >
+      {
+        job.techStack
+          ? Object.values(job.techStack)
+              .flat()
+              .map((s) => (
+                <span class="px-3 py-1 font-bold font-comic-body border-2 border-black bg-white hover:bg-primary hover:text-white transition-colors cursor-default text-sm shadow-[2px_2px_0_0_#000]">
+                  {s}
+                </span>
+              ))
+          : job.skills &&
+            job.skills.map((s) => (
+              <span class="px-3 py-1 font-bold font-comic-body border-2 border-black bg-white hover:bg-primary hover:text-white transition-colors cursor-default text-sm shadow-[2px_2px_0_0_#000]">
+                {s}
+              </span>
+            ))
+      }
+    </div>
+  </div>
+</div>

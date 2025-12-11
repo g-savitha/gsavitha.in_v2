@@ -1,252 +1,89 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import JobCard from '../components/JobCard.astro';
+import { jobs } from '../data/jobs';
+import { recommendations } from '../data/recommendations';
 
-const jobs = [
-    {
-        role: 'Software Engineer 2',
-        company: 'Lloyds Technology Centre',
-        startYear: '2023',
-        period: 'Oct 2023 - Present',
-        description: [
-            'Open Banking:',
-            'Lead 5-member team to deliver mobile/web app to 1M+ users.',
-            'Boosted Consent Admin UI performance by 20%',
-            'Lead “Doctor OB” (a POC )fullstack microservices and environments health check dashboard for productivity & CO₂ reduction.',
-            'Rebuilt Open Banking Web app for improved UX & scalability.',
-            'Migrated React frontend from Flux to Redux',
-            'Implemented V4.0 OBIE spec changes.',
-            'Presented architecture to CEO/CTO; platform-wide leadership.',
-            'Developed POC UI for Appsign login feature.',
-            'Recognized as top performer; ensured on-time delivery of features and bug fixes.',
-            'Got recognised by stake holders and higher management in show & tell 6 times'
-        ],
-        techStack: {
-            Frontend: ['React', 'Typescript', 'Redux toolkit', 'Flux', 'Webpack', 'React Testing Library', 'CSS', 'Styled Components', 'Jest', 'Material UI'],
-            Backend: ['Node.js', 'Express.js', 'REST API', 'Microservices', 'GCP', 'Oauth2.0', 'SQL Server', 'Cassandra', 'Docker'],
-            Tools: ['Splunk', 'Dynatrace', 'Figma', 'Jenkins', 'UCD']
-        }
-    },
-    {
-        role: 'Software Engineer 2',
-        company: 'Epam Anywhere',
-        startYear: '2022',
-        period: 'May 2022 - Sep 2022',
-        description: [
-            'Developed e-commerce product and order management modules.',
-            'Enhanced search functionality and reliability.',
-        ],
-        techStack: {
-            Frontend: ['React', 'Redux', 'Typescript', 'styled-components', 'Webpack', 'REST API']
-        }
-    },
-    {
-        role: 'Open Source Maintainer',
-        company: 'React & GitHub',
-        startYear: '2019',
-        period: 'Nov 2019 - Present',
-        description: [
-            'Contributed as a maintainer for the GitHub Profile README Generator, enhancing user engagement through customizable profiles. https://github.com/rahuldkjain/github-profile-readme-generator',
-            'Actively maintained the ReactJS documentation site, ensuring up-to-date and accessible resources for developers. https://github.com/reactjs/te.react.dev',
-            'Collaborated on the India Vaccine Frontend project, contributing to public health awareness and information dissemination. https://github.com/IndiaVaccineIN/india-vaccine-frontend',
-            'Maintainer of React official Telugu Docs. Live Site: https://te-react-dev.vercel.app/learn Github Repo: https://github.com/reactjs/te.react.dev'
-        ],
-        techStack: {
-            Frontend: ['React', 'Gatsby', 'Webpack'],
-            Backend: ['Node.js', 'Express.js', 'GraphQL', 'gRPC', 'REST API']
-        }
-    },
-    {
-        role: 'Software Engineer 1',
-        company: 'Progress',
-        startYear: '2018',
-        period: 'Aug 2018 - Oct 2019',
-        description: [
-            'OpenEdge Management: Developed health monitoring solution for OpenEdge servers.',
-        ],
-        techStack: {
-            Frontend: ['React', 'Redux', 'Javascript', 'CSS', 'REST API'],
-            Backend: ['Java', 'SpringBoot', 'Oracle SQL', 'Junit']    
-        }
-    },
-     {
-        role: 'Associate Software Engineer',
-        company: 'Arcserve',
-        startYear: '2017',
-        period: 'Sept 2017 - Aug 2018',
-        description: [
-            'Unified Data Protection: Delivered data backup and disaster recovery modules',
-        ],
-        techStack: {
-            Frontend: ['React', 'Flux', 'Javascript', 'CSS', 'REST API'],
-            Backend: ['Java', 'SpringBoot', 'JPA', 'Junit', 'SQL Server']    
-        }
-    }
-];
-
-const recommendations = [
-    {
-        text: "During our time together at Lloyds Technology Centre, Savitha consistently impressed me with her curiosity and passion for technology. She excels in her core development skills and actively explores new technologies, learns quickly, and takes the initiative to build POCs that add real value to the team. Her enthusiasm for innovation and continuous learning makes her stand out. Savitha is a proactive team player who brings fresh ideas and energy to every project. She demonstrates strong leadership qualities through her ability to guide discussions, share knowledge, and inspire others, and she is also highly skilled in presentation, effectively communicating ideas and solutions. I highly recommend Savitha for roles that value technical expertise, innovation, and a growth mindset.",
-        author: "Nirmala Chirra",
-        role: "Engineering Manager at Lloyds Technology Centre"
-    },
-    {
-        text: "I was delighted when Savitha asked me to write a recommendation. She currently is a software engineer in a feature team that supports Open Banking at LBG, where I am her Product Owner. Savitha is a delight to work with - she has a very positive and collegiate attitude. Always amongst the first to volunteer, she also takes personal responsibility for team deliverables without prompting. The quality of her work is always high, and whenever there are issues to be addressed, she has a determination to understand, resolve and learn. In many ways, she is a model engineer; keen to build knowledge and apply learnings to new situations, adaptable and helps her colleagues to meet their own potential. She has the prospects of a long and successful career ahead of her, although I hope to keep working with her for the foreseeable future!",
-        author: "Kevin Floyd",
-        role: "Senior Product Owner at Lloyds Banking Group"
-    },
-    {
-        text: `I was very fortunate to have worked with Savitha. She has a good grip on her technical abilities & also thinks through a problem statement really well. During joint learning sessions, she always used to ask questions which showed how well & deep she goes into her thought process to understand things.
-After having joined the team & getting hold of the new code base, she never hesitated in making changes & suggested reforms to further grow the code.
-In short time, she made a place for herself in the team & started owning the frontend repos with great command.
-She's a quick learner, technically sound & active contributor; one wishes to work alongside with.
-I highly recommend Savitha for the impact she creates in the team she joins.`,
-        author: "Diamond Khanna",
-        role: "Team Lead at Wipro"
-    },
-    {
-        text: "I had the pleasure of working with Savitha for one year at Lloyds Technology Center, where we collaborated on various projects. Savitha has exceptional skills in JavaScript, React, and Node js, consistently delivering high-quality code. She developed a crucial feature that streamlined the banking process and she also played a key role in developing features that significantly enhanced user engagement, which resulted in our mobile apps being adopted by many customers. Savitha is not only a talented developer but also a fantastic team player who communicates effectively and brings innovative solutions to the table. I highly recommend Savitha for any development role; her expertise and dedication will be a tremendous asset to any organization.",
-        author: "Mounika Yalavarthi",
-        role: "Senior Quality Engineer at Lloyds Technology Center"
-    },
-    {
-        text: "I've had the pleasure of working alongside Savitha and i can confidently say she is one of the most talented full stack developers I've encountered. She possesses a combination of technical expertise, dedication, good communication and teamwork. She has a passion for continuous learning and consistently seeks out opportunities to expand their knowledge and continuously updated to the latest technologies. I highly recommend Savitha for a full stack role.",
-        author: "Soundarya Ravi",
-        role: "Senior Software Engineer at Wipro"
-    },
-    {
-        text: "I had the opportunity to work with Savitha during our time at LTC, and I can confidently say she is an incredible asset to any team. She is proactive, takes initiative, and consistently ensures that tasks are delivered on time with a high level of quality. When needed, she goes the extra mile—working beyond regular hours to address critical issues and meet deadlines. One of Savitha’s standout contributions has been her work on uplifting our frontend application (CWA). She successfully led the migration from React 16.x to React 19.x, transitioned the state management from Flux to Redux, and modernized the build process by moving from Gulp to Webpack. In addition to these upgrades, she made sure the application was fully responsive across devices, which greatly improved user experience. Her efforts also led to a measurable 20% performance improvement in the CAUI application—an achievement that had a significant impact on the overall system efficiency. She contributed to V4 structural changes as well, playing a key role in ensuring stability and scalability for future enhancements. Beyond frontend work, Savitha contributed to backend and infrastructure tasks such as Open Banking certificate renewals and engaged in in-depth discussions on architecture and system improvements. She consistently works beyond her level of experience, shows a strong drive to learn, and is always focused on upskilling herself. She is also a great team player—collaborative, detail-oriented, and always willing to mentor others and share her knowledge. I will strongly recommend Savitha for the forward thinking, reliable and full stack developer roles.",
-        author: "Sahita Mudunuri",
-        role: "Senior Software Engineer at Lloyds Technology Centre"
-    },
-    {
-        text: "I am delighted to recommend Savitha Gollamundi to any employer. I have collaborated with Savitha on several projects at Progress Software, and her dedication to completing tasks on time is truly impressive. Savitha is an exceptional professional whose expertise, positive attitude, and strong problem-solving skills make her an invaluable asset to any team. Her ability to consistently deliver high-quality work, coupled with her collaborative spirit, sets her apart. I have no doubt that Savitha will continue to excel and make significant contributions wherever she goes.",
-        author: "Prabhash Bhasker",
-        role: "Senior Software Engineer at Progress Software"
-    },
-    {
-        text: `I've had the privilege of working with Savitha, she is a skilled full stack developer with strong expertise in JavaScript and its ecosystem. Her eagerness to learn and adapt sets her apart, making her an invaluable asset to any team.
-Beyond her technical skills, Savitha stands out for her leadership and sense of ownership. She fosters collaboration effortlessly and ensures every task is executed with precision and care. Her dedication, curiosity, and drive make her a standout professional in any organization.`,
-        author: "Rishitha Pericherla",
-        role: "Software Engineer at Arcserve"
-    }
-];
+// Sort jobs by start year descending if needed, or rely on array order.
+// jobs are already in order.
 ---
 
 <Layout title="Work Experience | Savitha">
-    <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-5xl md:text-6xl font-bold mb-20 text-center font-comic-heading text-black uppercase tracking-wide">
+    <div class="max-w-6xl mx-auto
+px-4">
+        <h1
+            class="text-5xl md:text-6xl font-bold mb-20 text-center
+font-comic-heading text-black uppercase tracking-wide"
+        >
             MY SAGA
         </h1>
-        
-        {/* Timeline Container */}
+        {
+            /*
+Timeline Container */
+        }
         {/* Latest Comics (Work Experience) Container */}
         <div class="space-y-24 relative">
-            
-            {jobs.map((job, index) => (
-                <div class="grid md:grid-cols-[400px_1fr] gap-12 items-center group">
-                    
-                    {/* Comic Cover (Visual Representation) */}
-                    <div class={`relative aspect-[3/4] border-[4px] border-black shadow-[8px_8px_0_0_#000] bg-white transition-transform hover:-translate-y-2 hover:shadow-[12px_12px_0_0_#000] overflow-hidden flex flex-col ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
-                        {/* "New Issue" Sticker */}
-                         <div class="absolute -right-6 top-6 bg-primary text-white font-comic-heading text-xl px-12 py-1 rotate-45 border-[3px] border-black z-20 shadow-md">
-                            ISSUE #{job.startYear}
-                        </div>
-
-                        {/* Top Protocol Bar */}
-                        <div class="bg-black text-white px-4 py-2 flex justify-between items-center font-comic-body font-bold uppercase tracking-widest border-b-[3px] border-black z-10">
-                            <span>{job.company}</span>
-                            <span>$0.00</span>
-                        </div>
-
-                        {/* Cover Art Area (CSS Art) */}
-                        <div class="flex-1 relative bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent flex items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-500">
-                             {/* Dynamic Background Pattern */}
-                             <div class={`absolute inset-0 opacity-20 ${['bg-red-100', 'bg-blue-100', 'bg-yellow-100', 'bg-purple-100'][index % 4]}`} 
-                                  style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 10px 10px;">
-                             </div>
-                             
-                             {/* Big Title on Cover */}
-                             <h2 class="relative z-10 text-5xl font-comic-heading text-black leading-tight drop-shadow-[3px_3px_0_#fff] uppercase">
-                                 {job.role}
-                             </h2>
-                        </div>
-
-                        {/* Bottom Bar */}
-                        <div class="bg-white border-t-[3px] border-black p-4">
-                             <div class="flex justify-between items-end">
-                                 <div class="flex flex-col">
-                                     <span class="text-xs font-bold text-text-muted uppercase">Published By</span>
-                                     <span class="font-comic-heading text-xl">{job.company}</span>
-                                 </div>
-                                 <div class="barcode w-24 h-8 bg-black opacity-80" style="background: repeating-linear-gradient(90deg, #000 0px, #000 2px, #fff 2px, #fff 4px);"></div>
-                             </div>
-                        </div>
-                    </div>
-
-                    {/* Content Side (Description) */}
-                    <div class={`flex flex-col ${index % 2 === 0 ? 'md:order-2 md:pl-8' : 'md:order-1 md:pr-8 md:text-right'}`}>
-                        <div class="inline-block bg-accent px-4 py-1 border-[3px] border-black shadow-[4px_4px_0_0_#000] font-comic-heading text-lg -rotate-2 w-fit mb-6 self-start">
-                           {job.period}
-                        </div>
-                        
-                        <h3 class="text-4xl font-bold font-comic-heading text-black mb-6 uppercase">
-                            {job.role} <span class="text-primary block text-2xl mt-2">@ {job.company}</span>
-                        </h3>
-
-                        <div class="comic-panel mb-8">
-                            <ul class={`space-y-3 text-black font-medium text-lg list-none ${index % 2 === 0 ? 'text-left' : 'md:text-right text-left'}`}>
-                                {job.description.map(desc => (
-                                    <li class="leading-relaxed relative pl-6 md:pl-0">
-                                        <span class={`absolute left-0 top-2 w-2 h-2 bg-black rounded-full ${index % 2 === 0 ? '' : 'md:hidden'}`}></span>
-                                        {desc.split(/(https?:\/\/[^\s]+)/g).map(part => 
-                                            part.match(/^https?:\/\//) ? (
-                                                <a href={part} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline hover:text-primary-hover font-bold break-all">{part}</a>
-                                            ) : (
-                                                part
-                                            )
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                         {/* Skills Chips */}
-                         <div class={`flex flex-wrap gap-2 ${index % 2 === 0 ? 'justify-start' : 'md:justify-end justify-start'}`}>
-                            {job.techStack ? (
-                                Object.values(job.techStack).flat().map(s => (
-                                    <span class="px-3 py-1 font-bold font-comic-body border-2 border-black bg-white hover:bg-primary hover:text-white transition-colors cursor-default text-sm shadow-[2px_2px_0_0_#000]">{s}</span>
-                                ))
-                            ) : (
-                                job.skills && job.skills.map(s => (
-                                    <span class="px-3 py-1 font-bold font-comic-body border-2 border-black bg-white hover:bg-primary hover:text-white transition-colors cursor-default text-sm shadow-[2px_2px_0_0_#000]">{s}</span>
-                                ))
-                            )}
-                         </div>
-                    </div>
-                </div>
-            ))}
+            {jobs.map((job, index) => <JobCard job={job} index={index} />)}
         </div>
-        
         <div class="mt-32">
-            <h2 class="text-5xl font-bold mb-12 text-center font-comic-heading uppercase">Kind Words</h2>
+            <h2
+                class="text-5xl font-bold
+mb-12 text-center font-comic-heading uppercase"
+            >
+                Kind Words
+            </h2>
             <div class="md:columns-2 gap-8 space-y-8">
-                {recommendations.map(rec => (
-                    <div class="comic-panel break-inside-avoid">
-                        <div class="text-6xl text-primary/20 absolute top-2 left-4 font-comic-heading">"</div>
-                        <p class="text-lg text-black italic mb-6 relative z-10 leading-loose whitespace-pre-line font-comic-body">
-                            {rec.text}
-                        </p>
-                        <div class="flex items-center gap-4 mt-auto border-t-2 border-black pt-4">
-                            <div class="w-12 h-12 rounded-full bg-accent border-[3px] border-black flex items-center justify-center text-black font-bold shrink-0 font-comic-heading text-xl">
-                                {rec.author[0]}
-                            </div>
-                            <div>
-                                <div class="font-bold text-black font-comic-heading text-lg">{rec.author}</div>
-                                <div class="text-sm text-black font-bold">{rec.role}</div>
-                            </div>
+                {
+                    recommendations.map((rec) => (
+                        <div class="comic-panel break-inside-avoid">
+                            {' '}
+                            <div
+                                class="text-6xl text-primary/20
+absolute top-2 left-4 font-comic-heading"
+                            >
+                                "
+                            </div>{' '}
+                            <p
+                                class="text-lg text-black
+italic mb-6 relative z-10 leading-loose whitespace-pre-line font-comic-body"
+                            >
+                                {rec.text}{' '}
+                            </p>{' '}
+                            <div
+                                class="flex items-center gap-4 mt-auto border-t-2
+border-black pt-4"
+                            >
+                                {' '}
+                                {/* Author Initial Avatar if image not used in this view, or
+we could use the image if we wanted to upgrade this match Recommendations.astro
+*/}{' '}
+                                <div
+                                    class="w-12 h-12 rounded-full bg-accent border-[3px] border-black flex
+items-center justify-center text-black font-bold shrink-0 font-comic-heading
+text-xl"
+                                >
+                                    {' '}
+                                    {rec.name[0]}{' '}
+                                </div>{' '}
+                                <div>
+                                    {' '}
+                                    <div
+                                        class="font-bold text-black
+font-comic-heading text-lg"
+                                    >
+                                        {rec.name}
+                                    </div>{' '}
+                                    <div
+                                        class="text-sm text-black
+font-bold"
+                                    >
+                                        {rec.role} @ {rec.company}
+                                    </div>{' '}
+                                </div>{' '}
+                            </div>{' '}
                         </div>
-                    </div>
-                ))}
+                    ))
+                }
             </div>
         </div>
     </div>
