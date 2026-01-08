@@ -1,4 +1,5 @@
 ---
+
 import { jobs } from '../data/jobs';
 
 // Assign colors dynamically to jobs (repeating pattern if more jobs than colors)
@@ -15,6 +16,7 @@ const jobsWithColors = jobs.map((job, i) => ({
     ...job,
     theme: colorSchemes[i % colorSchemes.length],
 }));
+
 ---
 
 <section
