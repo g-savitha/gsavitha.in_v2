@@ -26,6 +26,15 @@
         class="font-comic-heading text-xl text-black hover:text-primary transition-colors uppercase tracking-wide"
         >Writings</a
       >
+      <button
+        id="global-sound-toggle"
+        class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-black bg-gray-300 hover:scale-110 transition-transform shadow-[2px_2px_0_0_#000]"
+        aria-label="Toggle Sound"
+      >
+        <span class="sound-icon hidden text-lg">🔊</span>
+        <span class="mute-icon text-lg">🔇</span>
+      </button>
+
       <a
         href="https://github.com/g-savitha"
         target="_blank"
@@ -42,4 +51,70 @@
       MENU
     </div>
   </div>
+
+  <script is:inline>
+    // Global Sound Manager
+    window.SOUND_ENABLED =
+      localStorage.getItem('comic_sound_enabled') === 'true'; // Default false
+
+    const updateGlobalSoundUI = () => {
+      const btn = document.getElementById('global-sound-toggle');
+      const soundIcon = btn?.querySelector('.sound-icon');
+      const muteIcon = btn?.querySelector('.mute-icon');
+
+      if (window.SOUND_ENABLED) {
+        btn?.classList.remove('bg-gray-300');
+        btn?.classList.add('bg-green-400');
+        soundIcon?.classList.remove('hidden');
+        muteIcon?.classList.add('hidden');
+      } else {
+        btn?.classList.add('bg-gray-300');
+        btn?.classList.remove('bg-green-400');
+        soundIcon?.classList.add('hidden');
+        muteIcon?.classList.remove('hidden');
+      }
+    };
+
+    // Initialize UI on load
+    updateGlobalSoundUI();
+
+    document
+      .getElementById('global-sound-toggle')
+      ?.addEventListener('click', () => {
+        window.SOUND_ENABLED = !window.SOUND_ENABLED;
+        localStorage.setItem(
+          'comic_sound_enabled',
+          window.SOUND_ENABLED.toString(),
+        );
+        updateGlobalSoundUI();
+
+        // Dispatch event for other components to listen to if needed
+        window.dispatchEvent(
+          new CustomEvent('sound-toggle', { detail: window.SOUND_ENABLED }),
+        );
+      });
+
+    // Handle view transitions if enabled
+    document.addEventListener('astro:page-load', () => {
+      // Re-attach listener and update UI after navigation
+      // Re-read state in case it changed
+      window.SOUND_ENABLED =
+        localStorage.getItem('comic_sound_enabled') === 'true';
+      updateGlobalSoundUI();
+
+      document
+        .getElementById('global-sound-toggle')
+        ?.addEventListener('click', () => {
+          window.SOUND_ENABLED = !window.SOUND_ENABLED;
+          localStorage.setItem(
+            'comic_sound_enabled',
+            window.SOUND_ENABLED.toString(),
+          );
+          updateGlobalSoundUI();
+          window.dispatchEvent(
+            new CustomEvent('sound-toggle', { detail: window.SOUND_ENABLED }),
+          );
+        });
+    });
+  </script>
 </header>
